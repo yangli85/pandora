@@ -10,4 +10,4 @@ export GEM_VERSION="1.0"
 gem install bundler_geminabox
 rake build
 
-gem inabox pkg/*.gem --host "http://101.200.162.121/gem/"
+gem inabox pkg/*.gem --host "http://101.200.162.121:9292"

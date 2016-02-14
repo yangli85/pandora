@@ -14,7 +14,7 @@ Gem::Specification.new do |spec|
   spec.license       = "MIT"
 
   if spec.respond_to?(:metadata)
-    spec.metadata['allowed_push_host'] = "http://101.200.162.121/gem/"
+    spec.metadata['allowed_push_host'] = "http://101.200.162.121:9292"
   else
     raise "RubyGems 2.0 or newer is required to protect against public gem pushes."
   end
