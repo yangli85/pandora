@@ -9,6 +9,7 @@ require 'factories/user'
 require 'factories/image'
 require 'factories/account'
 require 'factories/account_log'
+require 'factories/sms_code'
 
 
 RSpec.configure do |config|

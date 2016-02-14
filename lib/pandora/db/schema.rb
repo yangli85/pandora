@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160214124820) do
+ActiveRecord::Schema.define(version: 20160214202523) do
 
   create_table "account_logs", force: :cascade do |t|
     t.integer  "account_id", limit: 4
@@ -42,6 +42,15 @@ ActiveRecord::Schema.define(version: 20160214124820) do
     t.datetime "created_at",                                null: false
     t.datetime "updated_at",                                null: false
   end
+
+  create_table "sms_codes", force: :cascade do |t|
+    t.string   "phone_number", limit: 255
+    t.string   "code",         limit: 255, null: false
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
+  end
+
+  add_index "sms_codes", ["phone_number"], name: "index_sms_codes_on_phone_number", using: :btree
 
   create_table "users", force: :cascade do |t|
     t.string   "name",         limit: 255,                    null: false
