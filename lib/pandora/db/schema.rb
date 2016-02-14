@@ -44,8 +44,8 @@ ActiveRecord::Schema.define(version: 20160214124820) do
   end
 
   create_table "users", force: :cascade do |t|
-    t.string   "name",         limit: 255
-    t.string   "gender",       limit: 255, default: "unknow", null: false
+    t.string   "name",         limit: 255,                    null: false
+    t.string   "gender",       limit: 255, default: "unknow"
     t.string   "phone_number", limit: 255
     t.integer  "avatar",       limit: 4
     t.integer  "vitality",     limit: 4,   default: 0
