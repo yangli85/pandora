@@ -1,3 +1,4 @@
+# encoding: UTF-8
 FactoryGirl.define do
   sequence(:identity) { |n| n }
   phone_number = rand.to_s[2..12]
