@@ -4,7 +4,7 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
 Gem::Specification.new do |spec|
   spec.name          = "pandora"
-  spec.version       = ENV['GEM_VERSION'] || "1.0.0"
+  spec.version       = ENV['GEM_VERSION'] || "1.0.1"
   spec.authors       = ["yangli"]
   spec.email         = ["3217169615@qq.com"]
 
@@ -14,7 +14,7 @@ Gem::Specification.new do |spec|
   spec.license       = "MIT"
 
   if spec.respond_to?(:metadata)
-    spec.metadata['allowed_push_host'] = "http://101.200.162.121:9292"
+    spec.metadata['allowed_push_host'] = "http://localhost:8808"
   else
     # raise "RubyGems 2.0 or newer is required to protect against public gem pushes."
     puts "RubyGems 2.0 or newer is required to protect against public gem pushes."
