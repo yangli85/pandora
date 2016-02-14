@@ -1,0 +1,15 @@
+default: &default
+  adapter: <%= ENV['PANDORA_DATABASE_ADAPTER']%>
+  database: <%= ENV['PANDORA_DATABASE_NAME']%>
+  host: <%= ENV['PANDORA_DATABASE_HOST']%>
+  username: <%= ENV['PANDORA_DATABASE_USERNAME']%>
+  password: <%= ENV['PANDORA_DATABASE_PASSWORD']%>
+
+production:
+  <<: *default
+
+development:
+  <<: *default
+
+test:
+  <<: *default

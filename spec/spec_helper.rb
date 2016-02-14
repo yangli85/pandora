@@ -1,0 +1,22 @@
+require 'rubygems'
+require 'factory_girl'
+require 'database_cleaner'
+
+ENV['RACK_ENV']='test'
+
+$LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
+require 'factories/user'
+require 'factories/image'
+require 'factories/account'
+require 'factories/account_log'
+
+
+RSpec.configure do |config|
+  config.include FactoryGirl::Syntax::Methods
+
+  config.before :each do
+    cleaner = DatabaseCleaner[:active_record, {:model => Pandora::Models::Base}]
+    cleaner.strategy = :truncation
+    cleaner.clean
+  end
+end
