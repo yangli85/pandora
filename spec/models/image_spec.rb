@@ -17,18 +17,18 @@ describe Pandora::Models::Image do
         expect { create(:image, url: '   ') }.to raise_error ActiveRecord::RecordInvalid
       end
 
-      it "should raise error if type is wrong" do
-        expect { create(:image, type: 'wrong') }.to raise_error ActiveRecord::RecordInvalid
+      it "should raise error if category is wrong" do
+        expect { create(:image, category: 'wrong') }.to raise_error ActiveRecord::RecordInvalid
       end
 
-      it "should raise error if type is wrong" do
-        expect { create(:image, type: nil) }.to raise_error ActiveRecord::RecordInvalid
+      it "should raise error if category is wrong" do
+        expect { create(:image, category: nil) }.to raise_error ActiveRecord::RecordInvalid
       end
     end
 
     context 'success' do
-      it "shoud create image successfully if type is right" do
-        expect{create(:image, type: 'unknow')}.not_to raise_error
+      it "shoud create image successfully if category is right" do
+        expect{create(:image, category: 'unknow')}.not_to raise_error
       end
 
       it "shoud create image successfully if url is right" do

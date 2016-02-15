@@ -4,7 +4,7 @@ describe Pandora::Services::SMSService do
   let(:fake_phone_number) { '13811739234' }
   let(:fake_code) { '1234' }
 
-  describe 'update_code' do
+  describe '#update_code' do
 
     context "create" do
       it "should create a new record to store sms code" do
@@ -27,7 +27,7 @@ describe Pandora::Services::SMSService do
     end
   end
 
-  describe 'get_latest_code' do
+  describe '#get_latest_code' do
 
     it "should return nil if no record" do
       expect(subject.get_latest_code fake_phone_number).to eq nil

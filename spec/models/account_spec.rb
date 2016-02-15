@@ -20,7 +20,7 @@ describe Pandora::Models::Account do
     end
 
     it "should get account log by account" do
-      expect(account.account_log.size).to eq 5
+      expect(account.account_logs.size).to eq 5
     end
   end
 

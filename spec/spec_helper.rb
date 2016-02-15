@@ -10,6 +10,11 @@ require 'factories/image'
 require 'factories/account'
 require 'factories/account_log'
 require 'factories/sms_code'
+require 'factories/ad_image'
+require 'factories/twitter_image'
+require 'factories/twitter'
+require 'factories/shop'
+require 'factories/designer'
 
 
 RSpec.configure do |config|
