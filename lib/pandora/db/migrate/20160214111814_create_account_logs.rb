@@ -7,6 +7,7 @@ class CreateAccountLogs < ActiveRecord::Migration
       t.string :channel, :default => :beautyshow, :null => false
       t.integer :from_user
       t.integer :to_user
+      t.string :desc
       t.timestamps :null => false
     end
     add_foreign_key "account_logs", "accounts", :column => "account_id"

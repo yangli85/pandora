@@ -28,11 +28,11 @@ describe Pandora::Models::Image do
 
     context 'success' do
       it "shoud create image successfully if category is right" do
-        expect{create(:image, category: 'unknow')}.not_to raise_error
+        expect { create(:image, category: 'unknow') }.not_to raise_error
       end
 
       it "shoud create image successfully if url is right" do
-        expect{create(:image, url: 'images/1.jpg')}.not_to raise_error
+        expect { create(:image, url: 'images/1.jpg') }.not_to raise_error
       end
     end
   end

@@ -3,15 +3,15 @@ lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
 Gem::Specification.new do |spec|
-  spec.name          = "pandora"
-  spec.version       = ENV['GEM_VERSION'] || "1.0.2"
-  spec.authors       = ["yangli"]
-  spec.email         = ["3217169615@qq.com"]
+  spec.name = "pandora"
+  spec.version = ENV['GEM_VERSION'] || "1.0.2"
+  spec.authors = ["yangli"]
+  spec.email = ["3217169615@qq.com"]
 
-  spec.summary       = %q{pandora}
-  spec.description   = %q{A gem for the SQL to provide CRUD operations on the DB}
-  spec.homepage      = ""
-  spec.license       = "MIT"
+  spec.summary = %q{pandora}
+  spec.description = %q{A gem for the SQL to provide CRUD operations on the DB}
+  spec.homepage = ""
+  spec.license = "MIT"
 
   if spec.respond_to?(:metadata)
     spec.metadata['allowed_push_host'] = "http://localhost:8808"
@@ -20,10 +20,10 @@ Gem::Specification.new do |spec|
     puts "RubyGems 2.0 or newer is required to protect against public gem pushes."
   end
 
-  spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
-  spec.bindir        = "exe"
-  spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
-  spec.require_paths = ["lib","db","config"]
+  spec.files = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
+  spec.bindir = "exe"
+  spec.executables = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
+  spec.require_paths = ["lib", "db", "config"]
 
   spec.add_dependency 'mysql2'
   spec.add_dependency 'activerecord', '~> 4.2.0'

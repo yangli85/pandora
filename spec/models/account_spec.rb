@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'pandora/models/user'
 require 'pandora/models/account'
 require 'pandora/models/account_log'
 

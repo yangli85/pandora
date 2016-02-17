@@ -5,6 +5,7 @@ require 'database_cleaner'
 ENV['RACK_ENV']='test'
 
 $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
+
 require 'factories/user'
 require 'factories/image'
 require 'factories/account'
@@ -15,7 +16,11 @@ require 'factories/twitter_image'
 require 'factories/twitter'
 require 'factories/shop'
 require 'factories/designer'
-
+require 'factories/vita'
+require 'factories/vita_image'
+require 'factories/message'
+require 'factories/favorite_image'
+require 'factories/favorite_designer'
 
 RSpec.configure do |config|
   config.include FactoryGirl::Syntax::Methods

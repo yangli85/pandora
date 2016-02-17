@@ -1,4 +1,5 @@
-require 'pandora/models/ad_images'
+require 'pandora/models/image'
+
 module Pandora
   module Services
     class ImageService

@@ -4,15 +4,19 @@ require 'pandora/models/account'
 require 'pandora/models/twitter'
 require 'pandora/models/designer'
 require 'pandora/models/image'
+require 'pandora/models/message'
+require 'pandora/models/favorite_image'
+require 'pandora/models/favorite_designer'
+require 'pandora/models/designer'
 
 describe Pandora::Models::User do
   let(:user) { create(:user) }
 
   describe 'belongs to image' do
-    it "should get avatar image info" do
+    it "should get user avatar" do
       image = create(:image)
-      user_with_avatar = create(:user, {image: image, phone_number: '13811223232'})
-      expect(user_with_avatar.image).to eq image
+      user_with_avatar = create(:user, {avatar: image, phone_number: '13811223232'})
+      expect(user_with_avatar.avatar).to eq image
     end
   end
 
@@ -40,22 +44,54 @@ describe Pandora::Models::User do
 
   describe 'has many twitters' do
 
-    it "should get author's twitters" do
-      author = create(:user, phone_number: '13811111111')
-      designer = create(:user, phone_number: '13822222222')
-      twitter1 = create(:twitter, {author: author, designer: designer})
-      twitter2 = create(:twitter, {author: designer, designer: author})
-      expect(author.my_twitters.count).to eq 1
-      expect(author.my_twitters.first.author).to eq author
+    it "should get user's twitters" do
+      author1 = create(:user, phone_number: '13811111111')
+      author2 = create(:user, phone_number: '13811111112')
+      user = create(:user, phone_number: '13811111113')
+      designer = create(:designer, user: user)
+      twitter1 = create(:twitter, {author: author1, designer: designer})
+      twitter2 = create(:twitter, {author: author2, designer: designer})
+      expect(author1.twitters.count).to eq 1
+    end
+  end
+
+  describe 'has many messages' do
+    before do
+      create(:message, user: user)
+      create(:message, user: user)
+      create(:message, user: user)
     end
 
-    it "should get author's twitters" do
-      author = create(:user, phone_number: '13811111111')
-      designer = create(:user, phone_number: '13822222222')
-      twitter1 = create(:twitter, {author: author, designer: designer})
-      twitter2 = create(:twitter, {author: designer, designer: author})
-      expect(author.related_twitters.count).to eq 1
-      expect(author.related_twitters.first.designer).to eq author
+    it "should get user's messages" do
+      expect(user.messages.count).to eq 3
+    end
+  end
+
+  describe 'has many favorite images' do
+    before do
+      image1 = create(:image)
+      image2 = create(:image)
+      create(:favorite_image, {user: user, favorited_image: image1})
+      create(:favorite_image, {user: user, favorited_image: image2})
+    end
+
+    it "should get user's favorite images" do
+      expect(user.favorited_images.count).to eq 2
+    end
+  end
+
+  describe 'has many favorite designers' do
+    before do
+      user1 = create(:user, phone_number: 13811112222)
+      user2 = create(:user, phone_number: 13811113333)
+      designer1 = create(:designer, user: user1)
+      designer2 = create(:designer, user: user2)
+      create(:favorite_designer, {user: user, favorited_designer: designer1})
+      create(:favorite_designer, {user: user, favorited_designer: designer2})
+    end
+
+    it "should get user's favorite images" do
+      expect(user.favorited_designers.count).to eq 2
     end
   end
 

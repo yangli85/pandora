@@ -1,6 +1,7 @@
 require 'spec_helper'
 require 'pandora/models/account'
 require 'pandora/models/account_log'
+require 'pandora/models/user'
 
 describe Pandora::Models::AccountLog do
   let(:user) { create(:user) }

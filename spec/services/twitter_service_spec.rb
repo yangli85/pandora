@@ -1,11 +1,9 @@
 require 'pandora/services/twitter_service'
-require 'pandora/models/image'
-require 'pandora/models/user'
-require 'pandora/models/twitter'
 
 describe Pandora::Services::TwitterService do
   let(:author) { create(:user, phone_number: '13800000001') }
-  let(:designer) { create(:user, phone_number: '13800000002') }
+  let(:user) { create(:user, phone_number: '13800000002') }
+  let(:designer) { create(:designer, user: user) }
   let(:image1) { create(:image, category: 'twitter') }
   let(:image2) { create(:image, category: 'twitter') }
   let(:image3) { create(:image, category: 'twitter') }
@@ -50,6 +48,63 @@ describe Pandora::Services::TwitterService do
       image = (subject.get_ordered_twitter_images 3, 1, 'likes').first
       expect(image.twitter).to eq twitter2
       expect(image.image).to eq image5
+    end
+  end
+
+  describe "#get_twitter_images" do
+    it "should return twitter's images" do
+      expect(subject.get_twitter_images(twitter1.id).count).to eq 3
+    end
+  end
+
+  describe "#get_ordered_twitters" do
+    it "should return all twitters order by created_at desc" do
+      twitters = subject.get_ordered_twitters(2, 1, 'created_at')
+      expect(twitters.each_cons(2).all? { |twitter1, twitter2| twitter1.created_at >= twitter2.created_at }).to eq true
+    end
+
+    it "should get twitters images from returned twitter" do
+      twitter = subject.get_ordered_twitters(2, 1, 'created_at').first
+      expect(twitter.images).to eq([image1, image2, image3])
+    end
+  end
+
+  describe "#search_twitter_by_id" do
+    it "should get correct twitter by twitter id" do
+      expect(subject.search_twitter_by_id twitter1.id).to eq twitter1
+    end
+  end
+
+  describe "#create_twitter" do
+    let(:fake_author_id) { author.id }
+    let(:fake_designer_id) { designer.id }
+    let(:fake_content) { 'new twitter' }
+    let(:fake_stars) { 3 }
+    let(:fake_image_paths) { [
+        {
+            image_path: 'images/1.jpg',
+            s_image_path: 'images/s_1.jpg'
+        },
+        {
+            image_path: 'images/2.jpg',
+            s_image_path: 'images/s_2.jpg'
+        }
+    ] }
+
+    it "should create twitter" do
+      subject.create_twitter(fake_author_id, fake_designer_id, fake_content, fake_image_paths, fake_stars, nil, nil)
+      twitter = Pandora::Models::Twitter.last
+      expect(twitter.author).to eq author
+      expect(twitter.designer).to eq designer
+      expect(twitter.content).to eq fake_content
+      expect(twitter.stars).to eq fake_stars
+    end
+
+    it "should create images for twitter" do
+      subject.create_twitter(fake_author_id, fake_designer_id, fake_content, fake_image_paths, fake_stars, nil, nil)
+      twitter = Pandora::Models::Twitter.last
+      expect(twitter.images.count).to eq(2)
+      expect(twitter.s_images.count).to eq(2)
     end
   end
 end

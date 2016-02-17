@@ -14,6 +14,6 @@ class CreateTwitters < ActiveRecord::Migration
     add_index :twitters, :author
     add_index :twitters, :designer
     add_foreign_key "twitters", "users", :column => "author"
-    add_foreign_key "twitters", "users", :column => "designer"
+    add_foreign_key "twitters", "designers", :column => "designer"
   end
 end

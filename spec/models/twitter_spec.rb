@@ -2,13 +2,27 @@ require 'pandora/models/twitter'
 require 'pandora/models/twitter_image'
 require 'pandora/models/user'
 require 'pandora/models/image'
+require 'pandora/models/designer'
 
 describe Pandora::Models::Twitter do
   let(:author) { create(:user, phone_number: '13811111111') }
-  let(:designer) { create(:user, phone_number: '13822222222') }
+  let(:designer) { create(:designer, user: author) }
   let(:twitter) { create(:twitter, {author: author, designer: designer}) }
   let(:image1) { create(:image) }
   let(:image2) { create(:image) }
+
+  describe 'scope' do
+    before do
+      create(:twitter, {author: author, designer: designer, deleted: false})
+      create(:twitter, {author: author, designer: designer, deleted: true})
+    end
+
+    context 'default scope' do
+      it "should return undeleted twitters" do
+        expect(author.twitters.count).to eq 1
+      end
+    end
+  end
 
   describe 'validate' do
     it "should raise error if content is too long" do

@@ -1,8 +1,8 @@
 class CreateVitaImages < ActiveRecord::Migration
   def change
     create_table :vita_images do |t|
-      t.integer :vita_id
-      t.integer :image_id
+      t.integer :vita_id, :null => false
+      t.integer :image_id, :null => false
       t.timestamps :null => false
     end
     add_index :vita_images, :vita_id

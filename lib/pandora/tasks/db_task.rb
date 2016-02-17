@@ -10,7 +10,7 @@ module Pandora
       include Rake::DSL if defined? Rake::DSL
 
       def install_tasks
-        path = File.expand_path('../',File.dirname(__FILE__))
+        path = File.expand_path('../', File.dirname(__FILE__))
 
         namespace :pandora_db do
           desc 'Creates the database from config/database.yml for the current RAILS_ENV. Without RAILS_ENV it defaults to creating the development database'
