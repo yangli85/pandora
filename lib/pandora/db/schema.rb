@@ -172,11 +172,13 @@ ActiveRecord::Schema.define(version: 20160216200145) do
   create_table "vita_images", force: :cascade do |t|
     t.integer  "vita_id",    limit: 4, null: false
     t.integer  "image_id",   limit: 4, null: false
+    t.integer  "s_image_id", limit: 4, null: false
     t.datetime "created_at",           null: false
     t.datetime "updated_at",           null: false
   end
 
   add_index "vita_images", ["image_id"], name: "fk_rails_0f2b6df185", using: :btree
+  add_index "vita_images", ["s_image_id"], name: "fk_rails_1980c88bd4", using: :btree
   add_index "vita_images", ["vita_id"], name: "index_vita_images_on_vita_id", using: :btree
 
   create_table "vitae", force: :cascade do |t|
@@ -206,6 +208,7 @@ ActiveRecord::Schema.define(version: 20160216200145) do
   add_foreign_key "twitters", "users", column: "author"
   add_foreign_key "users", "images"
   add_foreign_key "vita_images", "images"
+  add_foreign_key "vita_images", "images", column: "s_image_id"
   add_foreign_key "vita_images", "vitae", column: "vita_id"
   add_foreign_key "vitae", "designers"
 end

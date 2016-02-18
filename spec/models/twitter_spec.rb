@@ -106,6 +106,7 @@ describe Pandora::Models::Twitter do
                       :rank => 1
                   }
               ],
+          :image_count => 1,
           :created_at =>'1分钟内'
       }
     }

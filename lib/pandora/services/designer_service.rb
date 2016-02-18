@@ -11,8 +11,11 @@ module Pandora
         Pandora::Models::Designer.where(is_vip: true).order("#{order_by} desc").limit(page_size).offset((current_page-1)*page_size)
       end
 
-      def get_designer_by_user_id user_id
-        Pandora::Models::Designer.find_by_user_id(user_id)
+      def get_designer designer_id
+        begin
+          Pandora::Models::Designer.find(designer_id)
+        rescue => e
+        end
       end
 
       def get_designer_twitters designer_id, page_size, current_page, order_by
@@ -20,9 +23,9 @@ module Pandora
         designer.twitters.order("#{order_by} desc").limit(page_size).offset((current_page-1)*page_size) unless designer.nil?
       end
 
-      def get_designer_vitae designer_id
+      def get_designer_vitae designer_id, page_size, current_page
         designer = Pandora::Models::Designer.find_by_id(designer_id)
-        designer.vitae.order("created_at desc") unless designer.nil?
+        designer.vitae.order("created_at desc").limit(page_size).offset((current_page-1)*page_size) unless designer.nil?
       end
 
       def delete_designer_vitae vita_ids
@@ -33,8 +36,9 @@ module Pandora
         designer =Pandora::Models::Designer.find(designer_id)
         vita = Pandora::Models::Vita.create!(designer: designer, desc: desc)
         image_paths.each do |image_path|
-          image = Pandora::Models::Image.create!(category: 'vita', url: image_path)
-          Pandora::Models::VitaImage.create!(image: image, vita: vita)
+          image = Pandora::Models::Image.create!(category: 'vita', url: image_path[:image_path])
+          s_image = Pandora::Models::Image.create!(category: 'vita', url: image_path[:s_image_path])
+          Pandora::Models::VitaImage.create!(image: image, s_image: s_image, vita: vita)
         end
       end
 

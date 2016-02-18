@@ -26,13 +26,13 @@ describe Pandora::Services::DesignerService do
     end
   end
 
-  describe "#get_designer_by_user_id" do
+  describe "#get_designer" do
     it "should return designer info if designer exist" do
-      expect(subject.get_designer_by_user_id(user1.id).id).to eq (2)
+      expect(subject.get_designer(2).user.id).to eq 2
     end
 
     it "should return nil info if designer not exist" do
-      expect(subject.get_designer_by_user_id('no exist')).to eq nil
+      expect(subject.get_designer('no exist')).to eq nil
     end
   end
 
@@ -75,30 +75,36 @@ describe Pandora::Services::DesignerService do
       image2 = create(:image)
       image3 = create(:image)
       image4 = create(:image)
+      s_image1 = create(:image)
+      s_image2 = create(:image)
+      s_image3 = create(:image)
+      s_image4 = create(:image)
       vita1 = create(:vita, designer: designer)
       vita2 = create(:vita, designer: designer)
       vita3 = create(:vita, designer: designer)
       vita4 = create(:vita, designer: designer)
-      create(:vita_image, {image: image1, vita: vita1})
-      create(:vita_image, {image: image2, vita: vita2})
-      create(:vita_image, {image: image3, vita: vita3})
-      create(:vita_image, {image: image4, vita: vita4})
+      create(:vita_image, {image: image1, s_image: s_image1, vita: vita1})
+      create(:vita_image, {image: image2, s_image: s_image2, vita: vita2})
+      create(:vita_image, {image: image3, s_image: s_image3, vita: vita3})
+      create(:vita_image, {image: image4, s_image: s_image4, vita: vita4})
     end
 
     describe '#get_designer_vitae' do
       context 'designer exist' do
         it "should return designer's vitae'" do
-          expect(subject.get_designer_vitae(designer.id).count).to eq 4
+          expect(subject.get_designer_vitae(designer.id,5,1).count).to eq 4
+          expect(subject.get_designer_vitae(designer.id,2,1).count).to eq 2
+          expect(subject.get_designer_vitae(designer.id,5,2).count).to eq 0
         end
 
-        it "should ordered twitters by create_at'" do
-          expect(subject.get_designer_twitters(designer.id, 5, 1, 'created_at').each_cons(2).all? { |v1, v2| v1.created_at >= v2.created_at }).to eq true
+        it "should ordered vita by created_at'" do
+          expect(subject.get_designer_vitae(designer.id, 5, 1).each_cons(2).all? { |v1, v2| v1.created_at >= v2.created_at }).to eq true
         end
       end
 
       context 'designer not exist' do
         it "should return nil if designer not exist" do
-          expect(subject.get_designer_vitae(10)).to eq nil
+          expect(subject.get_designer_vitae(10,5,1)).to eq nil
         end
       end
     end
@@ -127,25 +133,36 @@ describe Pandora::Services::DesignerService do
 
     describe '#create_vita' do
       let(:fake_desc) { 'this is a new vita' }
-      let(:fake_image_paths) { ['images/1.jpg', 'images/2.jpg'] }
+      let(:fake_image_paths) {
+        [
+            {
+                image_path: 'images/1.jpg',
+                s_image_path: 'images/1.jpg'
+            },
+            {
+                image_path: 'images/2.jpg',
+                s_image_path: 'images/2.jpg'
+            }
+        ]
+      }
 
       before do
         designer.vitae.destroy_all
       end
 
       it "should create vita for designer" do
-        subject.create_vita designer.id,fake_image_paths,fake_desc
+        subject.create_vita designer.id, fake_image_paths, fake_desc
         expect(designer.vitae.count).to eq 1
       end
 
       it "should create vita images for vita" do
-        subject.create_vita designer.id,fake_image_paths,fake_desc
+        subject.create_vita designer.id, fake_image_paths, fake_desc
         expect(Pandora::Models::VitaImage.count).to eq 2
       end
 
       it "should create images for vita" do
-        subject.create_vita designer.id,fake_image_paths,fake_desc
-        expect(Pandora::Models::Image.count).to eq 2
+        subject.create_vita designer.id, fake_image_paths, fake_desc
+        expect(Pandora::Models::Image.count).to eq 4
       end
     end
   end
