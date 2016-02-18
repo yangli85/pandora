@@ -3,9 +3,11 @@ require 'pandora/models/twitter_image'
 require 'pandora/models/user'
 require 'pandora/models/image'
 require 'pandora/models/designer'
+require 'date'
 
 describe Pandora::Models::Twitter do
-  let(:author) { create(:user, phone_number: '13811111111') }
+  let(:avatar) { create(:image) }
+  let(:author) { create(:user, {phone_number: '13811111111', avatar: avatar}) }
   let(:designer) { create(:designer, user: author) }
   let(:twitter) { create(:twitter, {author: author, designer: designer}) }
   let(:image1) { create(:image) }
@@ -53,6 +55,69 @@ describe Pandora::Models::Twitter do
 
     it "should get twitter's s_images" do
       expect(twitter.s_images.count).to eq 2
+    end
+  end
+
+  describe '#likes' do
+
+    it "should return twitter's sum likes" do
+      create(:twitter_image, {likes: 2, twitter: twitter, s_image: image1, image: image1})
+      create(:twitter_image, {likes: 3, twitter: twitter, s_image: image2, image: image2})
+
+      expect(twitter.likes).to eq 5
+    end
+
+    it "should return 0 if twitter has no image" do
+      expect(twitter.likes).to eq 0
+    end
+  end
+
+  describe '#attribues' do
+    let(:fake_result) {
+      {
+          :id => 1,
+          :author =>
+              {
+                  :id => 1,
+                  :name => "user1",
+                  :avatar => "images/1.jpg"
+              },
+          :content => "this is a test twitter",
+          :likes => 5,
+          :designer =>
+              {
+                  :id => 1,
+                  :user_id => 1,
+                  :name => "user1",
+                  :avatar => "images/1.jpg"
+              },
+          :images =>
+              [
+                  {
+                      :s_image => "images/1.jpg",
+                      :image => "images/1.jpg",
+                      :likes => 2,
+                      :rank => 1
+                  },
+                  {
+                      :s_image => "images/1.jpg",
+                      :image => "images/1.jpg",
+                      :likes => 3,
+                      :rank => 1
+                  }
+              ],
+          :created_at =>'1分钟内'
+      }
+    }
+
+    before do
+      allow(Time).to receive(:now).and_return(DateTime.parse('20160218180000'))
+      create(:twitter_image, {likes: 2, twitter: twitter, s_image: image1, image: image1})
+      create(:twitter_image, {likes: 3, twitter: twitter, s_image: image2, image: image2})
+    end
+
+    it "should return needed attributes for the twitter" do
+      expect(twitter.attributes).to eq fake_result
     end
   end
 end

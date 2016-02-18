@@ -12,7 +12,7 @@ module Pandora
       end
 
       def get_twitter_images id
-        Pandora::Models::TwitterImage.where(twitter_id: id)
+        Pandora::Models::TwitterImage.where(twitter_id: id).order('rank asc')
       end
 
       def get_ordered_twitters page_size, current_page, order_by

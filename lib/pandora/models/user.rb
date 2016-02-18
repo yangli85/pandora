@@ -17,6 +17,14 @@ module Pandora
       has_many :favorited_designers, through: :favorite_designers
       has_one :designer
       belongs_to :avatar, class_name: "Pandora::Models::Image", foreign_key: :image_id
+
+      def attributes
+        {
+            id: id,
+            name: name,
+            avatar: avatar.url
+        }
+      end
     end
   end
 end

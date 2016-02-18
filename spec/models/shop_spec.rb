@@ -1,4 +1,6 @@
 require 'pandora/models/shop'
+require 'pandora/models/user'
+require 'pandora/models/designer'
 
 describe Pandora::Models::Shop do
   let(:shop) { create(:shop) }

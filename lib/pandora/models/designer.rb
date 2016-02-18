@@ -8,6 +8,15 @@ module Pandora
       has_many :vitae, class_name: "Pandora::Models::Vita", foreign_key: :designer_id
       belongs_to :user
       belongs_to :shop
+
+      def attributes
+        {
+            id: id,
+            user_id: user.id,
+            name: user.name,
+            avatar: user.avatar && user.avatar.url
+        }
+      end
     end
   end
 end

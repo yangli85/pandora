@@ -1,6 +1,7 @@
 require 'rubygems'
 require 'factory_girl'
 require 'database_cleaner'
+require 'pandora/models/base'
 
 ENV['RACK_ENV']='test'
 

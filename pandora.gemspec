@@ -4,7 +4,7 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
 Gem::Specification.new do |spec|
   spec.name = "pandora"
-  spec.version = ENV['GEM_VERSION'] || "1.0.2"
+  spec.version = ENV['GEM_VERSION'] || "1.0.0"
   spec.authors = ["yangli"]
   spec.email = ["3217169615@qq.com"]
 
