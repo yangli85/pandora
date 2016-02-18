@@ -73,6 +73,10 @@ describe Pandora::Services::TwitterService do
     it "should get correct twitter by twitter id" do
       expect(subject.search_twitter_by_id twitter1.id).to eq twitter1
     end
+
+    it "should return nil if no matched twitter" do
+      expect(subject.search_twitter_by_id 100).to eq nil
+    end
   end
 
   describe "#create_twitter" do

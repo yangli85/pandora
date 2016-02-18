@@ -20,7 +20,10 @@ module Pandora
       end
 
       def search_twitter_by_id id
-        Pandora::Models::Twitter.find(id)
+        begin
+          Pandora::Models::Twitter.where(id: id).first
+        rescue => e
+        end
       end
 
       def create_twitter author_id, designer_id, content, image_paths, stars, latitude, longtitude

@@ -24,7 +24,7 @@ module Pandora
             s_image: s_image && s_image.url,
             image: image && image.url,
             likes: likes,
-            designer: designer.atrributes,
+            designer: twitter.designer.attributes,
             twitter_id: twitter_id,
             rank: rank
         }

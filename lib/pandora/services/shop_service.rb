@@ -5,7 +5,7 @@ module Pandora
     class ShopService
       include Math
 
-      def get_vicinal_shop longtitude, latitude, range
+      def get_vicinal_shops longtitude, latitude, range
         s_lon = longtitude.to_f - range/(cos(radians longtitude)*69).abs
         b_lon = longtitude.to_f + range/(cos(radians longtitude)*69).abs
         s_lat = latitude.to_f - (range/69.to_f)

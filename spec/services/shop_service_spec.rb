@@ -6,7 +6,7 @@ describe Pandora::Services::ShopService do
   let(:fake_lon) { "108.9420" }
   let(:fake_lat) { "34.2610" }
 
-  describe "#get_vicinal_shop" do
+  describe "#get_vicinal_shops" do
     before do
       create(:shop, latitude: '34.2620', longtitude: '108.9430')
       create(:shop, latitude: '34.2620', longtitude: '108.9440')
@@ -16,16 +16,16 @@ describe Pandora::Services::ShopService do
     end
 
     it "should return all vicinal shops in the range" do
-      expect(subject.get_vicinal_shop(fake_lon, fake_lat, 5).count).to eq 4
-      expect(subject.get_vicinal_shop(fake_lon, fake_lat, 1).count).to eq 2
+      expect(subject.get_vicinal_shops(fake_lon, fake_lat, 5).count).to eq 4
+      expect(subject.get_vicinal_shops(fake_lon, fake_lat, 1).count).to eq 2
     end
 
     it "should in the range for return shops" do
-      expect(subject.get_vicinal_shop(fake_lon, fake_lat, 5).all? { |shop| shop.distance <=5 }).to eq true
+      expect(subject.get_vicinal_shops(fake_lon, fake_lat, 5).all? { |shop| shop.distance <=5 }).to eq true
     end
 
     it "should ordered shops by distance asc" do
-      expect(subject.get_vicinal_shop(fake_lon, fake_lat, 5).each_cons(2).all? { |shop1, shop2| shop1.distance <=shop2.distance }).to eq true
+      expect(subject.get_vicinal_shops(fake_lon, fake_lat, 5).each_cons(2).all? { |shop1, shop2| shop1.distance <=shop2.distance }).to eq true
     end
   end
 

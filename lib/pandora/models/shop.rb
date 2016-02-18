@@ -8,6 +8,16 @@ module Pandora
       validates :latitude, :presence => true
       validates :longtitude, :presence => true
       has_many :designers
+
+      def attributes
+        {
+            id: id,
+            name: name,
+            address: address,
+            latitude: latitude,
+            longtitude: longtitude
+        }
+      end
     end
   end
 end
