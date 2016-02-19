@@ -8,7 +8,7 @@ module Pandora
   module Services
     class DesignerService
       def get_ordered_designers page_size, current_page, order_by
-        Pandora::Models::Designer.where(is_vip: true).order("#{order_by} desc").limit(page_size).offset((current_page-1)*page_size)
+        Pandora::Models::Designer.vip.order("#{order_by} desc").limit(page_size).offset((current_page-1)*page_size)
       end
 
       def get_designer designer_id
@@ -44,12 +44,12 @@ module Pandora
 
       def search_designers page_size, current_page, query
         users = Pandora::Models::User.where("name like ? or phone_number like ?", "%#{query}%", "%#{query}%")
-        Pandora::Models::Designer.where(is_vip: true, user: users).order('totally_stars desc')
+        Pandora::Models::Designer.vip.where(user: users).order('totally_stars desc')
       end
 
       def get_designer_rank designer_id, order_by
         designer = Pandora::Models::Designer.find(designer_id)
-        Pandora::Models::Designer.where("#{order_by} > ?", designer.send(order_by.to_sym)).count + 1
+        Pandora::Models::Designer.vip.where("#{order_by} > ?", designer.send(order_by.to_sym)).count + 1
       end
 
       def get_designer_shop designer_id

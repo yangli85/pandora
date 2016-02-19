@@ -183,8 +183,8 @@ describe Pandora::Services::DesignerService do
 
   describe '#get_designer_rank' do
     it "should return correct rank" do
-      expect(subject.get_designer_rank 1, 'totally_stars').to eq 3
-      expect(subject.get_designer_rank 3, 'totally_stars').to eq 1
+      expect(subject.get_designer_rank 1, 'totally_stars').to eq 2
+      expect(subject.get_designer_rank 2, 'totally_stars').to eq 1
     end
   end
 

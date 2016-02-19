@@ -13,7 +13,7 @@ describe Pandora::Models::Vita do
     image1 = create(:image)
     image2 = create(:image)
     create(:vita_image, {image: image1, s_image: image1, vita: vita})
-    create(:vita_image, {image: image2, s_image: image1, vita: vita})
+    create(:vita_image, {image: image2, s_image: image2, vita: vita})
   end
 
   describe 'has many' do
@@ -36,12 +36,28 @@ describe Pandora::Models::Vita do
           :images =>
               [
                   {
-                      :s_image => "images/1.jpg",
-                      :image => "images/1.jpg"
+                      :s_image =>
+                          {
+                              :id => 1,
+                              :url => "images/1.jpg"
+                          },
+                      :image =>
+                          {
+                              :id => 1,
+                              :url => "images/1.jpg"
+                          }
                   },
                   {
-                      :s_image => "images/1.jpg",
-                      :image => "images/1.jpg"
+                      :s_image =>
+                          {
+                              :id => 2,
+                              :url => "images/1.jpg"
+                          },
+                      :image =>
+                          {
+                              :id => 2,
+                              :url => "images/1.jpg"
+                          }
                   }
               ],
           :created_at => "1分钟内"}

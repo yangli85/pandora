@@ -65,4 +65,14 @@ describe Pandora::Models::Designer do
       expect { create(:designer, user: user) }.to raise_error ActiveRecord::RecordInvalid
     end
   end
+
+  describe 'scope' do
+    before do
+      Pandora::Models::Designer.update_all(is_vip: true)
+    end
+
+    it "should return only vip designers" do
+      expect(Pandora::Models::Designer.vip.count).to eq 0
+    end
+  end
 end

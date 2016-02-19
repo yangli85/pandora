@@ -84,6 +84,7 @@ describe Pandora::Services::TwitterService do
     let(:fake_designer_id) { designer.id }
     let(:fake_content) { 'new twitter' }
     let(:fake_stars) { 3 }
+    let(:fake_twitter_images_folder) { "twitter_images" }
     let(:fake_image_paths) { [
         {
             image_path: 'images/1.jpg',
@@ -94,9 +95,12 @@ describe Pandora::Services::TwitterService do
             s_image_path: 'images/s_2.jpg'
         }
     ] }
+    before do
+      allow(FileUtils).to receive(:mv)
+    end
 
     it "should create twitter" do
-      subject.create_twitter(fake_author_id, fake_designer_id, fake_content, fake_image_paths, fake_stars, nil, nil)
+      subject.create_twitter(fake_author_id, fake_designer_id, fake_content, fake_image_paths, fake_stars, nil, nil, fake_twitter_images_folder)
       twitter = Pandora::Models::Twitter.last
       expect(twitter.author).to eq author
       expect(twitter.designer).to eq designer
@@ -105,10 +109,17 @@ describe Pandora::Services::TwitterService do
     end
 
     it "should create images for twitter" do
-      subject.create_twitter(fake_author_id, fake_designer_id, fake_content, fake_image_paths, fake_stars, nil, nil)
+      subject.create_twitter(fake_author_id, fake_designer_id, fake_content, fake_image_paths, fake_stars, nil, nil, fake_twitter_images_folder)
       twitter = Pandora::Models::Twitter.last
       expect(twitter.images.count).to eq(2)
       expect(twitter.s_images.count).to eq(2)
+    end
+
+    it "should move the old image to new folder" do
+      subject.create_twitter(fake_author_id, fake_designer_id, fake_content, fake_image_paths, fake_stars, nil, nil, fake_twitter_images_folder)
+      twitter = Pandora::Models::Twitter.last
+      expect(twitter.images.map(&:url)).to eq(["twitter_images/1.jpg", "twitter_images/2.jpg"])
+      expect(twitter.s_images.map(&:url)).to eq(["twitter_images/s_1.jpg", "twitter_images/s_2.jpg"])
     end
   end
 end

@@ -11,8 +11,8 @@ module Pandora
 
       def images
         {
-            s_image: s_image && s_image.url,
-            image: image && image.url
+            s_image: s_image && s_image.attributes,
+            image: image && image.attributes
         }
       end
     end

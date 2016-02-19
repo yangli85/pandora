@@ -12,8 +12,8 @@ module Pandora
 
       def images
         {
-            s_image: s_image && s_image.url,
-            image: image && image.url,
+            s_image: s_image && s_image.attributes,
+            image: image && image.attributes,
             likes: likes,
             rank: rank
         }
@@ -21,8 +21,8 @@ module Pandora
 
       def attributes
         {
-            s_image: s_image && s_image.url,
-            image: image && image.url,
+            s_image: s_image && s_image.attributes,
+            image: image && image.attributes,
             likes: likes,
             designer: twitter.designer.attributes,
             twitter_id: twitter_id,

@@ -94,20 +94,36 @@ describe Pandora::Models::Twitter do
           :images =>
               [
                   {
-                      :s_image => "images/1.jpg",
-                      :image => "images/1.jpg",
+                      :s_image =>
+                          {
+                              :id => 2,
+                              :url => "images/1.jpg"
+                          },
+                      :image =>
+                          {
+                              :id => 2,
+                              :url => "images/1.jpg"
+                          },
                       :likes => 2,
                       :rank => 1
                   },
                   {
-                      :s_image => "images/1.jpg",
-                      :image => "images/1.jpg",
+                      :s_image =>
+                          {
+                              :id => 3,
+                              :url => "images/1.jpg"
+                          },
+                      :image =>
+                          {
+                              :id => 3,
+                              :url => "images/1.jpg"
+                          },
                       :likes => 3,
                       :rank => 1
                   }
               ],
           :image_count => 1,
-          :created_at =>'1分钟内'
+          :created_at => '1分钟内'
       }
     }
 
