@@ -49,20 +49,35 @@ describe Pandora::Services::DesignerService do
 
     context 'designer exist' do
       it "should return only current page's twitters(undeleted)" do
-        expect(subject.get_designer_twitters(designer.id, 2, 1, 'created_at').count).to eq 2
-        expect(subject.get_designer_twitters(designer.id, 5, 1, 'created_at').count).to eq 3
-        expect(subject.get_designer_twitters(designer.id, 5, 2, 'created_at').count).to eq 0
+        expect(subject.get_designer_twitters(designer.id, 2, 1).count).to eq 2
+        expect(subject.get_designer_twitters(designer.id, 5, 1).count).to eq 3
+        expect(subject.get_designer_twitters(designer.id, 5, 2).count).to eq 0
       end
 
       it "should ordered twitters by create_at'" do
-        expect(subject.get_designer_twitters(designer.id, 5, 1, 'created_at').each_cons(2).all? { |t1, t2| t1.created_at >= t2.created_at }).to eq true
+        expect(subject.get_designer_twitters(designer.id, 5, 1).each_cons(2).all? { |t1, t2| t1.created_at >= t2.created_at }).to eq true
       end
     end
 
     context 'designer not exist' do
       it "should return nil if designer not exist" do
-        expect(subject.get_designer_twitters(10, 5, 1, 'created_at')).to eq nil
+        expect(subject.get_designer_twitters(10, 5, 1)).to eq nil
       end
+    end
+  end
+
+  describe "#delete_twitter" do
+    let(:user) { create(:user, phone_number: '13800000004') }
+    let(:author) { create(:user, phone_number: '13800000005') }
+    let(:designer) { create(:designer, user: user) }
+
+    before do
+      create(:twitter, {author: author, designer: designer})
+    end
+
+    it "should update twitter.deleted to be true" do
+      subject.delete_twitter designer.id, 1
+      expect(designer.twitters.active.count).to eq 0
     end
   end
 
@@ -71,30 +86,30 @@ describe Pandora::Services::DesignerService do
     let(:designer) { create(:designer, user: user) }
 
     before do
-      image1 = create(:image)
-      image2 = create(:image)
-      image3 = create(:image)
-      image4 = create(:image)
       s_image1 = create(:image)
       s_image2 = create(:image)
       s_image3 = create(:image)
       s_image4 = create(:image)
+      image1 = create(:image, s_image: s_image1)
+      image2 = create(:image, s_image: s_image2)
+      image3 = create(:image, s_image: s_image3)
+      image4 = create(:image, s_image: s_image4)
       vita1 = create(:vita, designer: designer)
       vita2 = create(:vita, designer: designer)
       vita3 = create(:vita, designer: designer)
       vita4 = create(:vita, designer: designer)
-      create(:vita_image, {image: image1, s_image: s_image1, vita: vita1})
-      create(:vita_image, {image: image2, s_image: s_image2, vita: vita2})
-      create(:vita_image, {image: image3, s_image: s_image3, vita: vita3})
-      create(:vita_image, {image: image4, s_image: s_image4, vita: vita4})
+      create(:vita_image, {image: image1, vita: vita1})
+      create(:vita_image, {image: image2, vita: vita2})
+      create(:vita_image, {image: image3, vita: vita3})
+      create(:vita_image, {image: image4, vita: vita4})
     end
 
     describe '#get_designer_vitae' do
       context 'designer exist' do
         it "should return designer's vitae'" do
-          expect(subject.get_designer_vitae(designer.id,5,1).count).to eq 4
-          expect(subject.get_designer_vitae(designer.id,2,1).count).to eq 2
-          expect(subject.get_designer_vitae(designer.id,5,2).count).to eq 0
+          expect(subject.get_designer_vitae(designer.id, 5, 1).count).to eq 4
+          expect(subject.get_designer_vitae(designer.id, 2, 1).count).to eq 2
+          expect(subject.get_designer_vitae(designer.id, 5, 2).count).to eq 0
         end
 
         it "should ordered vita by created_at'" do
@@ -104,7 +119,7 @@ describe Pandora::Services::DesignerService do
 
       context 'designer not exist' do
         it "should return nil if designer not exist" do
-          expect(subject.get_designer_vitae(10,5,1)).to eq nil
+          expect(subject.get_designer_vitae(10, 5, 1)).to eq nil
         end
       end
     end

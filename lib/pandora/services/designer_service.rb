@@ -18,9 +18,9 @@ module Pandora
         end
       end
 
-      def get_designer_twitters designer_id, page_size, current_page, order_by
+      def get_designer_twitters designer_id, page_size, current_page
         designer = Pandora::Models::Designer.find_by_id(designer_id)
-        designer.twitters.order("#{order_by} desc").limit(page_size).offset((current_page-1)*page_size) unless designer.nil?
+        designer.twitters.active.order("created_at desc").limit(page_size).offset((current_page-1)*page_size) unless designer.nil?
       end
 
       def get_designer_vitae designer_id, page_size, current_page
@@ -36,9 +36,9 @@ module Pandora
         designer =Pandora::Models::Designer.find(designer_id)
         vita = Pandora::Models::Vita.create!(designer: designer, desc: desc)
         image_paths.each do |image_path|
-          image = Pandora::Models::Image.create!(category: 'vita', url: image_path[:image_path])
           s_image = Pandora::Models::Image.create!(category: 'vita', url: image_path[:s_image_path])
-          Pandora::Models::VitaImage.create!(image: image, s_image: s_image, vita: vita)
+          image = Pandora::Models::Image.create!(category: 'vita', s_image: s_image, url: image_path[:image_path])
+          Pandora::Models::VitaImage.create!(image: image, vita: vita)
         end
       end
 
@@ -66,6 +66,10 @@ module Pandora
       def update_shop designer_id, shop_id
         designer = Pandora::Models::Designer.find(designer_id)
         designer.update(shop_id: shop_id)
+      end
+
+      def delete_twitter designer_id, twitter_id
+        Pandora::Models::Twitter.where(designer: designer_id, id: twitter_id).update_all(deleted: true)
       end
     end
   end

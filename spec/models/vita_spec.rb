@@ -10,20 +10,17 @@ describe Pandora::Models::Vita do
   let(:designer) { create(:designer, user: user) }
   let(:vita) { create(:vita, designer: designer) }
   before do
-    image1 = create(:image)
+    s_image = create(:image)
+    image1 = create(:image, s_image: s_image)
     image2 = create(:image)
-    create(:vita_image, {image: image1, s_image: image1, vita: vita})
-    create(:vita_image, {image: image2, s_image: image2, vita: vita})
+    create(:vita_image, {image: image1, vita: vita})
+    create(:vita_image, {image: image2, vita: vita})
   end
 
   describe 'has many' do
     context "images" do
       it "should return all vita images" do
         expect(vita.images.count).to eq(2)
-      end
-
-      it "should return all vita small images" do
-        expect(vita.s_images.count).to eq(2)
       end
     end
   end
@@ -36,28 +33,14 @@ describe Pandora::Models::Vita do
           :images =>
               [
                   {
-                      :s_image =>
-                          {
-                              :id => 1,
-                              :url => "images/1.jpg"
-                          },
-                      :image =>
-                          {
-                              :id => 1,
-                              :url => "images/1.jpg"
-                          }
+                      :id => 2,
+                      :url => "images/1.jpg",
+                      :s_url => "images/1.jpg"
                   },
                   {
-                      :s_image =>
-                          {
-                              :id => 2,
-                              :url => "images/1.jpg"
-                          },
-                      :image =>
-                          {
-                              :id => 2,
-                              :url => "images/1.jpg"
-                          }
+                      :id => 3,
+                      :url => "images/1.jpg",
+                      :s_url => nil
                   }
               ],
           :created_at => "1分钟内"}

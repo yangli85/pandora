@@ -7,12 +7,10 @@ module Pandora
       validates :twitter_id, :presence => true
       validates :rank, :presence => true
       belongs_to :twitter
-      belongs_to :s_image, class_name: "Pandora::Models::Image"
       belongs_to :image, class_name: "Pandora::Models::Image"
 
       def images
         {
-            s_image: s_image && s_image.attributes,
             image: image && image.attributes,
             likes: likes,
             rank: rank
@@ -21,7 +19,6 @@ module Pandora
 
       def attributes
         {
-            s_image: s_image && s_image.attributes,
             image: image && image.attributes,
             likes: likes,
             designer: twitter.designer.attributes,

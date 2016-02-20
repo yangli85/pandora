@@ -22,7 +22,7 @@ module Pandora
         {
             id: id,
             name: name,
-            avatar: avatar.url
+            avatar: avatar && avatar.attributes
         }
       end
     end

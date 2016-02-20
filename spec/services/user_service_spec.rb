@@ -5,10 +5,17 @@ require 'pandora/models/account_log'
 describe Pandora::Services::UserService do
   let(:fake_phone_number) { "13812345678" }
 
-  describe "#get_user" do
+  describe "#get_user_by_phone_number" do
     it "should get user info by given phone_number" do
       user = create(:user, phone_number: fake_phone_number)
-      expect(subject.get_user fake_phone_number).to eq user
+      expect(subject.get_user_by_phone_number fake_phone_number).to eq user
+    end
+  end
+
+  describe "#get_user_by_id" do
+    it "should get user info by given id" do
+      user = create(:user, phone_number: fake_phone_number)
+      expect(subject.get_user_by_id user.id).to eq user
     end
   end
 
@@ -41,6 +48,32 @@ describe Pandora::Services::UserService do
       image = create(:image)
       subject.update_user_profile user.id, 'image_id', image.id
       expect(Pandora::Models::User.find(user.id).image_id).to eq image.id
+    end
+  end
+
+  describe "#update_user_avatar" do
+    let(:fake_image_path) {
+      {
+          image_path: 'images/1.jpg',
+          s_image_path: 'images/s_1.jpg'
+      }
+    }
+    let(:fake_avatar_images_folder) { "avatar_images" }
+
+    before do
+      allow(FileUtils).to receive(:mv)
+    end
+
+    it "should update user avatar" do
+      user = create(:user)
+      subject.update_user_avatar user.id, fake_image_path, fake_avatar_images_folder
+      expect(Pandora::Models::User.find(user.id).avatar.attributes).to eq (
+                                                                              {
+                                                                                  :id => 2,
+                                                                                  :url => "avatar_images/1.jpg",
+                                                                                  :s_url => "avatar_images/s_1.jpg"
+                                                                              }
+                                                                          )
     end
   end
 
@@ -161,24 +194,20 @@ describe Pandora::Services::UserService do
     describe "#get_user_twitters" do
       it "should return user's all undeleted twitters" do
         expect(subject.get_user_twitters(author.id, 3, 1).count).to eq 3
-        expect(subject.get_user_twitters(author.id, 3, 2).count).to eq 0
-        expect(subject.get_user_twitters(author.id, 2, 2).count).to eq 1
-      end
-
-      it "should return all undeleted twitters" do
-        expect(subject.get_user_twitters(author.id, 5, 1).all? { |t| !t.deleted }).to eq true
+        expect(subject.get_user_twitters(author.id, 3, 2).count).to eq 1
+        expect(subject.get_user_twitters(author.id, 2, 2).count).to eq 2
       end
     end
 
     describe "#delete_twitter" do
       it "should delete user's twitter" do
         subject.delete_twitter(author.id, author.twitters.first.id)
-        expect(author.twitters.count).to eq 2
+        expect(author.twitters.count).to eq 3
       end
 
       it "should not delete if the user is not the twitter's author" do
         subject.delete_twitter(100, author.twitters.first.id)
-        expect(author.twitters.count).to eq 3
+        expect(author.twitters.count).to eq 4
       end
     end
   end
@@ -197,11 +226,15 @@ describe Pandora::Services::UserService do
   end
 
   describe "#update_account_balance" do
+    let(:fake_desc) { "购买了5颗星星" }
+    let(:fake_event) { "recharge" }
+    let(:fake_channel) { "beautyshow" }
+
     it "should update account balance + 10" do
       user = create(:user)
       account = Pandora::Models::Account.create(user: user)
       old_balance = account.balance
-      subject.update_account_balance account.id, 10
+      subject.update_account_balance account.id, 10, fake_desc, user.id, user.id, fake_event, fake_channel
       expect(Pandora::Models::Account.find(account.id).balance - old_balance).to eq 10
     end
 
@@ -209,8 +242,22 @@ describe Pandora::Services::UserService do
       user = create(:user)
       account = Pandora::Models::Account.create(user: user)
       old_balance = account.balance
-      subject.update_account_balance account.id, -10
+      subject.update_account_balance account.id, -10, fake_desc, user.id, user.id, fake_event, fake_channel
       expect(Pandora::Models::Account.find(account.id).balance - old_balance).to eq -10
+    end
+
+    it "should add a new log for account" do
+      user = create(:user)
+      account = Pandora::Models::Account.create(user: user)
+      subject.update_account_balance account.id, 10, fake_desc, user.id, user.id, fake_event, fake_channel
+      logs = Pandora::Models::Account.find(account.id).account_logs
+      expect(logs.count).to eq 1
+      expect(logs.first[:desc]).to eq fake_desc
+      expect(logs.first[:event]).to eq fake_event
+      expect(logs.first[:from_user]).to eq user.id
+      expect(logs.first[:to_user]).to eq user.id
+      expect(logs.first[:balance]).to eq 10
+      expect(logs.first[:channel]).to eq fake_channel
     end
   end
 
@@ -225,11 +272,12 @@ describe Pandora::Services::UserService do
     end
 
     it "should return all accout's logs" do
-      expect(subject.get_account_logs(user.id).count).to eq 5
+      expect(subject.get_account_logs(user.id, 5, 1).count).to eq 5
+      expect(subject.get_account_logs(user.id, 3, 1).count).to eq 3
     end
 
     it "should order by created_at" do
-      expect(subject.get_account_logs(user.id).each_cons(2).all? { |l1, l2| l1.created_at >= l2.created_at }).to eq true
+      expect(subject.get_account_logs(user.id, 5, 1).each_cons(2).all? { |l1, l2| l1.created_at >= l2.created_at }).to eq true
     end
   end
 

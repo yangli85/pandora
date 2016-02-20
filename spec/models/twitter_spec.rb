@@ -10,8 +10,9 @@ describe Pandora::Models::Twitter do
   let(:author) { create(:user, {phone_number: '13811111111', avatar: avatar}) }
   let(:designer) { create(:designer, user: author) }
   let(:twitter) { create(:twitter, {author: author, designer: designer}) }
-  let(:image1) { create(:image) }
-  let(:image2) { create(:image) }
+  let(:s_image) { create(:image) }
+  let(:image1) { create(:image, s_image: s_image) }
+  let(:image2) { create(:image, s_image: s_image) }
 
   describe 'scope' do
     before do
@@ -19,9 +20,9 @@ describe Pandora::Models::Twitter do
       create(:twitter, {author: author, designer: designer, deleted: true})
     end
 
-    context 'default scope' do
+    context 'active scope' do
       it "should return undeleted twitters" do
-        expect(author.twitters.count).to eq 1
+        expect(author.twitters.active.count).to eq 1
       end
     end
   end
@@ -45,24 +46,20 @@ describe Pandora::Models::Twitter do
 
   describe 'has many' do
     before do
-      create(:twitter_image, {twitter: twitter, s_image: image1, image: image1})
-      create(:twitter_image, {twitter: twitter, s_image: image2, image: image2})
+      create(:twitter_image, {twitter: twitter, image: image1})
+      create(:twitter_image, {twitter: twitter, image: image2})
     end
 
     it "should get twitter's images" do
       expect(twitter.images.count).to eq 2
-    end
-
-    it "should get twitter's s_images" do
-      expect(twitter.s_images.count).to eq 2
     end
   end
 
   describe '#likes' do
 
     it "should return twitter's sum likes" do
-      create(:twitter_image, {likes: 2, twitter: twitter, s_image: image1, image: image1})
-      create(:twitter_image, {likes: 3, twitter: twitter, s_image: image2, image: image2})
+      create(:twitter_image, {likes: 2, twitter: twitter, image: image1})
+      create(:twitter_image, {likes: 3, twitter: twitter, image: image2})
 
       expect(twitter.likes).to eq 5
     end
@@ -80,7 +77,11 @@ describe Pandora::Models::Twitter do
               {
                   :id => 1,
                   :name => "user1",
-                  :avatar => "images/1.jpg"
+                  :avatar => {
+                      :id=>1,
+                      :url=>"images/1.jpg",
+                      :s_url=>nil
+                  }
               },
           :content => "this is a test twitter",
           :likes => 5,
@@ -89,34 +90,30 @@ describe Pandora::Models::Twitter do
                   :id => 1,
                   :user_id => 1,
                   :name => "user1",
-                  :avatar => "images/1.jpg"
+                  :avatar => {
+                      :id=>1,
+                      :url=>"images/1.jpg",
+                      :s_url=>nil
+                  }
               },
           :images =>
               [
                   {
-                      :s_image =>
-                          {
-                              :id => 2,
-                              :url => "images/1.jpg"
-                          },
                       :image =>
                           {
-                              :id => 2,
-                              :url => "images/1.jpg"
+                              :id => 3,
+                              :url => "images/1.jpg",
+                              :s_url => nil
                           },
                       :likes => 2,
                       :rank => 1
                   },
                   {
-                      :s_image =>
-                          {
-                              :id => 3,
-                              :url => "images/1.jpg"
-                          },
                       :image =>
                           {
-                              :id => 3,
-                              :url => "images/1.jpg"
+                              :id => 4,
+                              :url => "images/1.jpg",
+                              :s_url => "images/1.jpg"
                           },
                       :likes => 3,
                       :rank => 1
@@ -129,8 +126,8 @@ describe Pandora::Models::Twitter do
 
     before do
       allow(Time).to receive(:now).and_return(DateTime.parse('20160218180000'))
-      create(:twitter_image, {likes: 2, twitter: twitter, s_image: image1, image: image1})
-      create(:twitter_image, {likes: 3, twitter: twitter, s_image: image2, image: image2})
+      create(:twitter_image, {likes: 2, twitter: twitter, image: image1})
+      create(:twitter_image, {likes: 3, twitter: twitter, image: image2})
     end
 
     it "should return needed attributes for the twitter" do

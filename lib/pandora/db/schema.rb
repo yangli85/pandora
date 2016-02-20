@@ -88,6 +88,7 @@ ActiveRecord::Schema.define(version: 20160216200145) do
   create_table "images", force: :cascade do |t|
     t.string   "category",   limit: 255, default: "unknow", null: false
     t.string   "url",        limit: 255,                    null: false
+    t.integer  "s_image_id", limit: 4
     t.datetime "created_at",                                null: false
     t.datetime "updated_at",                                null: false
   end
@@ -128,7 +129,6 @@ ActiveRecord::Schema.define(version: 20160216200145) do
   create_table "twitter_images", force: :cascade do |t|
     t.integer  "twitter_id", limit: 4,             null: false
     t.integer  "image_id",   limit: 4,             null: false
-    t.integer  "s_image_id", limit: 4,             null: false
     t.integer  "likes",      limit: 4, default: 0
     t.integer  "rank",       limit: 4,             null: false
     t.datetime "created_at",                       null: false
@@ -136,7 +136,6 @@ ActiveRecord::Schema.define(version: 20160216200145) do
   end
 
   add_index "twitter_images", ["image_id"], name: "fk_rails_dfbaf11298", using: :btree
-  add_index "twitter_images", ["s_image_id"], name: "fk_rails_fa1b827e03", using: :btree
   add_index "twitter_images", ["twitter_id"], name: "index_twitter_images_on_twitter_id", using: :btree
 
   create_table "twitters", force: :cascade do |t|
@@ -172,13 +171,11 @@ ActiveRecord::Schema.define(version: 20160216200145) do
   create_table "vita_images", force: :cascade do |t|
     t.integer  "vita_id",    limit: 4, null: false
     t.integer  "image_id",   limit: 4, null: false
-    t.integer  "s_image_id", limit: 4, null: false
     t.datetime "created_at",           null: false
     t.datetime "updated_at",           null: false
   end
 
   add_index "vita_images", ["image_id"], name: "fk_rails_0f2b6df185", using: :btree
-  add_index "vita_images", ["s_image_id"], name: "fk_rails_1980c88bd4", using: :btree
   add_index "vita_images", ["vita_id"], name: "index_vita_images_on_vita_id", using: :btree
 
   create_table "vitae", force: :cascade do |t|
@@ -203,12 +200,10 @@ ActiveRecord::Schema.define(version: 20160216200145) do
   add_foreign_key "favorite_images", "users"
   add_foreign_key "messages", "users"
   add_foreign_key "twitter_images", "images"
-  add_foreign_key "twitter_images", "images", column: "s_image_id"
   add_foreign_key "twitters", "designers", column: "designer"
   add_foreign_key "twitters", "users", column: "author"
   add_foreign_key "users", "images"
   add_foreign_key "vita_images", "images"
-  add_foreign_key "vita_images", "images", column: "s_image_id"
   add_foreign_key "vita_images", "vitae", column: "vita_id"
   add_foreign_key "vitae", "designers"
 end

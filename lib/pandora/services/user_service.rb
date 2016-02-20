@@ -1,16 +1,24 @@
 require 'pandora/models/account'
+require 'pandora/models/account_log'
 require 'pandora/models/message'
 require 'pandora/models/image'
 require 'pandora/models/favorite_image'
 require 'pandora/models/favorite_designer'
 require 'pandora/models/designer'
 require 'pandora/models/user'
+require 'pandora/common/service_helper'
 
 module Pandora
   module Services
     class UserService
-      def get_user phone_number
+      include Pandora::Common::ServiceHelper
+
+      def get_user_by_phone_number phone_number
         Pandora::Models::User.find_by_phone_number(phone_number)
+      end
+
+      def get_user_by_id id
+        Pandora::Models::User.find(id)
       end
 
       def create_user phone_number
@@ -22,6 +30,15 @@ module Pandora
       def update_user_profile user_id, column, value
         user = Pandora::Models::User.find(user_id)
         user.update(column.to_sym => value)
+      end
+
+      def update_user_avatar user_id, image_path, avatar_images_folder
+        user = Pandora::Models::User.find(user_id)
+        s_image_path = move_image_to image_path[:s_image_path], avatar_images_folder
+        s_image = Pandora::Models::Image.create!(category: 'twitter', url: s_image_path)
+        image_path = move_image_to image_path[:image_path], avatar_images_folder
+        avatar = Pandora::Models::Image.create!(category: 'twitter', url: image_path, s_image: s_image)
+        user.update(avatar: avatar)
       end
 
       def add_favorite_image user_id, image_id
@@ -39,7 +56,7 @@ module Pandora
       end
 
       def favorited_images user_id
-        Pandora::Models::User.find(user_id).favorited_images
+        Pandora::Models::User.find(user_id).favorite_images
       end
 
       def add_favorite_designer user_id, designer_id
@@ -53,7 +70,7 @@ module Pandora
       end
 
       def favorited_designers user_id
-        Pandora::Models::User.find(user_id).favorited_designers
+        Pandora::Models::User.find(user_id).favorite_designers
       end
 
       def del_favorite_designers ids
@@ -72,13 +89,14 @@ module Pandora
         Pandora::Models::User.find(user_id).account
       end
 
-      def update_account_balance account_id, balance
-        account =  Pandora::Models::Account.find(account_id)
+      def update_account_balance account_id, balance, desc, from_user, to_user, event, channel
+        account = Pandora::Models::Account.find(account_id)
         account.update(balance: account.balance + balance)
+        Pandora::Models::AccountLog.create!(account: account, event: event, from_user: from_user, to_user: to_user, desc: desc, balance: balance, channel: channel)
       end
 
-      def get_account_logs user_id
-        Pandora::Models::User.find(user_id).account.account_logs.order("created_at desc")
+      def get_account_logs user_id, page_size, current_page
+        Pandora::Models::User.find(user_id).account.account_logs.order("created_at desc").limit(page_size).offset((current_page-1)*page_size)
       end
 
       def add_account_log account_id, event, channel, balance, from_user, to_user, desc
@@ -102,7 +120,7 @@ module Pandora
       end
 
       def get_messages user_id
-        Pandora::Models::User.find(user_id).messages
+        Pandora::Models::User.find(user_id).messages.order("created_at desc")
       end
 
       def delete_message message_id

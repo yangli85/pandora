@@ -3,13 +3,11 @@ class CreateTwitterImages < ActiveRecord::Migration
     create_table :twitter_images do |t|
       t.integer :twitter_id, :null => false
       t.integer :image_id, :null => false
-      t.integer :s_image_id, :null => false
       t.integer :likes, :default => 0
       t.integer :rank, :null => false
       t.timestamps :null => false
     end
     add_index :twitter_images, :twitter_id
     add_foreign_key "twitter_images", "images", :column => "image_id"
-    add_foreign_key "twitter_images", "images", :column => "s_image_id"
   end
 end

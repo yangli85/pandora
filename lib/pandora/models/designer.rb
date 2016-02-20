@@ -15,7 +15,7 @@ module Pandora
             id: id,
             user_id: user.id,
             name: user.name,
-            avatar: user.avatar && user.avatar.url
+            avatar: user.avatar && user.avatar.attributes
         }
       end
     end

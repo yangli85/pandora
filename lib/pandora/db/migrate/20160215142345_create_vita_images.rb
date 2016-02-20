@@ -3,12 +3,10 @@ class CreateVitaImages < ActiveRecord::Migration
     create_table :vita_images do |t|
       t.integer :vita_id, :null => false
       t.integer :image_id, :null => false
-      t.integer :s_image_id, :null => false
       t.timestamps :null => false
     end
     add_index :vita_images, :vita_id
     add_foreign_key "vita_images", "vitae", :column => "vita_id"
     add_foreign_key "vita_images", "images", :column => "image_id"
-    add_foreign_key "vita_images", "images", :column => "s_image_id"
   end
 end

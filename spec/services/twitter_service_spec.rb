@@ -4,20 +4,21 @@ describe Pandora::Services::TwitterService do
   let(:author) { create(:user, phone_number: '13800000001') }
   let(:user) { create(:user, phone_number: '13800000002') }
   let(:designer) { create(:designer, user: user) }
-  let(:image1) { create(:image, category: 'twitter') }
-  let(:image2) { create(:image, category: 'twitter') }
-  let(:image3) { create(:image, category: 'twitter') }
-  let(:image4) { create(:image, category: 'twitter') }
-  let(:image5) { create(:image, category: 'twitter') }
+  let(:s_image) { create(:image, category: 'twitter') }
+  let(:image1) { create(:image, {category: 'twitter', s_image: s_image}) }
+  let(:image2) { create(:image, {category: 'twitter', s_image: s_image}) }
+  let(:image3) { create(:image, {category: 'twitter', s_image: s_image}) }
+  let(:image4) { create(:image, {category: 'twitter', s_image: s_image}) }
+  let(:image5) { create(:image, {category: 'twitter', s_image: s_image}) }
   let(:twitter1) { create(:twitter, {author: author, designer: designer}) }
   let(:twitter2) { create(:twitter, {author: author, designer: designer}) }
 
   before do
-    create(:twitter_image, {likes: 2, s_image: image1, image: image1, twitter: twitter1, rank: 1})
-    create(:twitter_image, {likes: 3, s_image: image2, image: image2, twitter: twitter1, rank: 2})
-    create(:twitter_image, {likes: 4, s_image: image3, image: image3, twitter: twitter1, rank: 3})
-    create(:twitter_image, {likes: 5, s_image: image4, image: image4, twitter: twitter2, rank: 1})
-    create(:twitter_image, {likes: 12, s_image: image5, image: image5, twitter: twitter2, rank: 2})
+    create(:twitter_image, {likes: 2, image: image1, twitter: twitter1, rank: 1})
+    create(:twitter_image, {likes: 3, image: image2, twitter: twitter1, rank: 2})
+    create(:twitter_image, {likes: 4, image: image3, twitter: twitter1, rank: 3})
+    create(:twitter_image, {likes: 5, image: image4, twitter: twitter2, rank: 1})
+    create(:twitter_image, {likes: 12, image: image5, twitter: twitter2, rank: 2})
   end
   describe '#get_ordered_twitter_images' do
     context 'page_size and current_page' do
@@ -112,14 +113,13 @@ describe Pandora::Services::TwitterService do
       subject.create_twitter(fake_author_id, fake_designer_id, fake_content, fake_image_paths, fake_stars, nil, nil, fake_twitter_images_folder)
       twitter = Pandora::Models::Twitter.last
       expect(twitter.images.count).to eq(2)
-      expect(twitter.s_images.count).to eq(2)
     end
 
     it "should move the old image to new folder" do
       subject.create_twitter(fake_author_id, fake_designer_id, fake_content, fake_image_paths, fake_stars, nil, nil, fake_twitter_images_folder)
       twitter = Pandora::Models::Twitter.last
       expect(twitter.images.map(&:url)).to eq(["twitter_images/1.jpg", "twitter_images/2.jpg"])
-      expect(twitter.s_images.map(&:url)).to eq(["twitter_images/s_1.jpg", "twitter_images/s_2.jpg"])
+      expect(twitter.images.map(&:s_image).map(&:url)).to eq(["twitter_images/s_1.jpg", "twitter_images/s_2.jpg"])
     end
   end
 end

@@ -7,7 +7,6 @@ module Pandora
       include Pandora::Common::TimeHelper
       self.table_name="vitae"
       has_many :vita_images, dependent: :destroy
-      has_many :s_images, through: :vita_images, foreign_key: :s_image_id
       has_many :images, through: :vita_images, foreign_key: :image_id
       belongs_to :designer
       validates :designer_id, :presence => true
@@ -16,7 +15,7 @@ module Pandora
         {
             id: id,
             desc: desc,
-            images: vita_images.map(&:images),
+            images: images.map(&:attributes),
             created_at: relative_time(created_at)
         }
       end
