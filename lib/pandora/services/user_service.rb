@@ -32,11 +32,11 @@ module Pandora
         user.update(column.to_sym => value)
       end
 
-      def update_user_avatar user_id, image_path, avatar_images_folder
+      def update_user_avatar user_id, image_path, avatar_image_folder
         user = Pandora::Models::User.find(user_id)
-        s_image_path = move_image_to image_path[:s_image_path], avatar_images_folder
+        s_image_path = move_image_to image_path[:s_image_path], avatar_image_folder
         s_image = Pandora::Models::Image.create!(category: 'twitter', url: s_image_path)
-        image_path = move_image_to image_path[:image_path], avatar_images_folder
+        image_path = move_image_to image_path[:image_path], avatar_image_folder
         avatar = Pandora::Models::Image.create!(category: 'twitter', url: image_path, s_image: s_image)
         user.update(avatar: avatar)
       end

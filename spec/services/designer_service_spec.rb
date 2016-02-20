@@ -160,23 +160,25 @@ describe Pandora::Services::DesignerService do
             }
         ]
       }
+      let(:fake_vita_image_folder) { 'temp_images' }
 
       before do
+        allow(FileUtils).to receive(:mv)
         designer.vitae.destroy_all
       end
 
       it "should create vita for designer" do
-        subject.create_vita designer.id, fake_image_paths, fake_desc
+        subject.create_vita designer.id, fake_image_paths, fake_desc, fake_vita_image_folder
         expect(designer.vitae.count).to eq 1
       end
 
       it "should create vita images for vita" do
-        subject.create_vita designer.id, fake_image_paths, fake_desc
+        subject.create_vita designer.id, fake_image_paths, fake_desc, fake_vita_image_folder
         expect(Pandora::Models::VitaImage.count).to eq 2
       end
 
       it "should create images for vita" do
-        subject.create_vita designer.id, fake_image_paths, fake_desc
+        subject.create_vita designer.id, fake_image_paths, fake_desc, fake_vita_image_folder
         expect(Pandora::Models::Image.count).to eq 4
       end
     end
