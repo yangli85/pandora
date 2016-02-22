@@ -10,9 +10,8 @@ describe Pandora::Models::Twitter do
   let(:author) { create(:user, {phone_number: '13811111111', avatar: avatar}) }
   let(:designer) { create(:designer, user: author) }
   let(:twitter) { create(:twitter, {author: author, designer: designer}) }
-  let(:s_image) { create(:image) }
-  let(:image1) { create(:image, s_image: s_image) }
-  let(:image2) { create(:image, s_image: s_image) }
+  let(:image1) { create(:image) }
+  let(:image2) { create(:image) }
 
   describe 'scope' do
     before do
@@ -56,7 +55,6 @@ describe Pandora::Models::Twitter do
   end
 
   describe '#likes' do
-
     it "should return twitter's sum likes" do
       create(:twitter_image, {likes: 2, twitter: twitter, image: image1})
       create(:twitter_image, {likes: 3, twitter: twitter, image: image2})
@@ -69,6 +67,23 @@ describe Pandora::Models::Twitter do
     end
   end
 
+  describe "dependent destroy" do
+    before do
+      create(:twitter_image, {twitter: twitter, image: image1})
+      create(:twitter_image, {twitter: twitter, image: image2})
+    end
+
+    it "should delete twitter_image if twitter destroy" do
+      twitter.destroy
+      expect(Pandora::Models::TwitterImage.count).to eq 0
+    end
+
+    it "should delete twitter's images if twitter destroy" do
+      twitter.destroy
+      expect(Pandora::Models::Image.count).to eq 1
+    end
+  end
+
   describe '#attribues' do
     let(:fake_result) {
       {
@@ -78,9 +93,9 @@ describe Pandora::Models::Twitter do
                   :id => 1,
                   :name => "user1",
                   :avatar => {
-                      :id=>1,
-                      :url=>"images/1.jpg",
-                      :s_url=>nil
+                      :id => 1,
+                      :url => "images/1.jpg",
+                      :s_url => nil
                   }
               },
           :content => "this is a test twitter",
@@ -91,9 +106,9 @@ describe Pandora::Models::Twitter do
                   :user_id => 1,
                   :name => "user1",
                   :avatar => {
-                      :id=>1,
-                      :url=>"images/1.jpg",
-                      :s_url=>nil
+                      :id => 1,
+                      :url => "images/1.jpg",
+                      :s_url => nil
                   }
               },
           :images =>
@@ -101,9 +116,9 @@ describe Pandora::Models::Twitter do
                   {
                       :image =>
                           {
-                              :id => 3,
+                              :id => 2,
                               :url => "images/1.jpg",
-                              :s_url => nil
+                              :s_url=>"images/1.jpg"
                           },
                       :likes => 2,
                       :rank => 1
@@ -111,7 +126,7 @@ describe Pandora::Models::Twitter do
                   {
                       :image =>
                           {
-                              :id => 4,
+                              :id => 3,
                               :url => "images/1.jpg",
                               :s_url => "images/1.jpg"
                           },
@@ -128,6 +143,8 @@ describe Pandora::Models::Twitter do
       allow(Time).to receive(:now).and_return(DateTime.parse('20160218180000'))
       create(:twitter_image, {likes: 2, twitter: twitter, image: image1})
       create(:twitter_image, {likes: 3, twitter: twitter, image: image2})
+      create(:image, original_image_id: image1.id)
+      create(:image, original_image_id: image2.id)
     end
 
     it "should return needed attributes for the twitter" do

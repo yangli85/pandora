@@ -5,8 +5,8 @@ module Pandora
     class Designer < Pandora::Models::Base
       scope :vip, -> { where(is_vip: true) }
       validates :user_id, :uniqueness => true, :presence => true
-      has_many :twitters, class_name: "Pandora::Models::Twitter", foreign_key: :designer
-      has_many :vitae, class_name: "Pandora::Models::Vita", foreign_key: :designer_id
+      has_many :twitters, class_name: "Pandora::Models::Twitter", foreign_key: :designer_id, dependent: :destroy
+      has_many :vitae, class_name: "Pandora::Models::Vita", foreign_key: :designer_id, dependent: :destroy
       belongs_to :user
       belongs_to :shop
 

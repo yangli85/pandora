@@ -34,10 +34,10 @@ module Pandora
 
       def update_user_avatar user_id, image_path, avatar_image_folder
         user = Pandora::Models::User.find(user_id)
+        original_image_path = move_image_to image_path[:image_path], avatar_image_folder
+        avatar = Pandora::Models::Image.create!(category: 'twitter', url: original_image_path)
         s_image_path = move_image_to image_path[:s_image_path], avatar_image_folder
-        s_image = Pandora::Models::Image.create!(category: 'twitter', url: s_image_path)
-        image_path = move_image_to image_path[:image_path], avatar_image_folder
-        avatar = Pandora::Models::Image.create!(category: 'twitter', url: image_path, s_image: s_image)
+        s_image = Pandora::Models::Image.create!(category: 'twitter', original_image: avatar, url: s_image_path)
         user.update(avatar: avatar)
       end
 
@@ -57,6 +57,10 @@ module Pandora
 
       def favorited_images user_id
         Pandora::Models::User.find(user_id).favorite_images
+      end
+
+      def del_favorite_image user_id, image_id
+        Pandora::Models::FavoriteImage.where(user_id: user_id, image_id: image_id).destroy_all
       end
 
       def add_favorite_designer user_id, designer_id
@@ -125,6 +129,10 @@ module Pandora
 
       def delete_message message_id
         Pandora::Models::Message.find(message_id).destroy
+      end
+
+      def create_message user_id, content
+        Pandora::Models::Message.create!(user_id: user_id, content: content)
       end
 
       def search_users query

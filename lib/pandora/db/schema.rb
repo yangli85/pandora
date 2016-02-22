@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160216200145) do
+ActiveRecord::Schema.define(version: 20160222205321) do
 
   create_table "account_logs", force: :cascade do |t|
     t.integer  "account_id", limit: 4
@@ -49,6 +49,19 @@ ActiveRecord::Schema.define(version: 20160216200145) do
   add_index "ad_images", ["category"], name: "index_ad_images_on_category", using: :btree
   add_index "ad_images", ["image_id"], name: "fk_rails_3967fda917", using: :btree
 
+  create_table "commissioners", force: :cascade do |t|
+    t.string   "phone_number",  limit: 255,                    null: false
+    t.string   "name",          limit: 255
+    t.string   "password",      limit: 10,  default: "888888"
+    t.integer  "code_image_id", limit: 4
+    t.string   "status",        limit: 255, default: "normal"
+    t.datetime "created_at",                                   null: false
+    t.datetime "updated_at",                                   null: false
+  end
+
+  add_index "commissioners", ["code_image_id"], name: "fk_rails_fa70faddc9", using: :btree
+  add_index "commissioners", ["phone_number"], name: "index_commissioners_on_phone_number", using: :btree
+
   create_table "designers", force: :cascade do |t|
     t.integer  "user_id",       limit: 4,                 null: false
     t.integer  "shop_id",       limit: 4
@@ -86,35 +99,59 @@ ActiveRecord::Schema.define(version: 20160216200145) do
   add_index "favorite_images", ["user_id"], name: "index_favorite_images_on_user_id", using: :btree
 
   create_table "images", force: :cascade do |t|
-    t.string   "category",   limit: 255, default: "unknow", null: false
-    t.string   "url",        limit: 255,                    null: false
-    t.integer  "s_image_id", limit: 4
-    t.datetime "created_at",                                null: false
-    t.datetime "updated_at",                                null: false
+    t.string   "category",          limit: 255, default: "unknow", null: false
+    t.string   "url",               limit: 255,                    null: false
+    t.integer  "original_image_id", limit: 4
+    t.datetime "created_at",                                       null: false
+    t.datetime "updated_at",                                       null: false
   end
 
+  add_index "images", ["original_image_id"], name: "fk_rails_5e5acaf60a", using: :btree
+
   create_table "messages", force: :cascade do |t|
-    t.integer  "user_id",    limit: 4,                     null: false
+    t.integer  "user_id",    limit: 4,                    null: false
     t.text     "content",    limit: 65535
-    t.boolean  "is_new",                   default: false
-    t.datetime "created_at",                               null: false
-    t.datetime "updated_at",                               null: false
+    t.boolean  "is_new",                   default: true
+    t.datetime "created_at",                              null: false
+    t.datetime "updated_at",                              null: false
   end
 
   add_index "messages", ["user_id"], name: "index_messages_on_user_id", using: :btree
 
+  create_table "promotion_logs", force: :cascade do |t|
+    t.string   "phone_number", limit: 255
+    t.string   "mobile_type",  limit: 255, default: "unknow"
+    t.integer  "c_id",         limit: 4
+    t.datetime "created_at",                                  null: false
+    t.datetime "updated_at",                                  null: false
+  end
+
+  add_index "promotion_logs", ["c_id"], name: "index_promotion_logs_on_c_id", using: :btree
+
+  create_table "shop_promotion_logs", force: :cascade do |t|
+    t.integer  "c_id",       limit: 4
+    t.integer  "shop_id",    limit: 4
+    t.text     "content",    limit: 65535
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
+  end
+
+  add_index "shop_promotion_logs", ["c_id"], name: "index_shop_promotion_logs_on_c_id", using: :btree
+  add_index "shop_promotion_logs", ["shop_id"], name: "index_shop_promotion_logs_on_shop_id", using: :btree
+
   create_table "shops", force: :cascade do |t|
-    t.string   "name",       limit: 255,   null: false
-    t.string   "address",    limit: 255,   null: false
-    t.string   "latitude",   limit: 255,   null: false
-    t.string   "longtitude", limit: 255,   null: false
+    t.string   "name",       limit: 255,                   null: false
+    t.string   "address",    limit: 255,                   null: false
+    t.string   "latitude",   limit: 255,                   null: false
+    t.string   "longtitude", limit: 255,                   null: false
     t.string   "scale",      limit: 255
     t.string   "category",   limit: 255
+    t.boolean  "deleted",                  default: false
     t.text     "desc",       limit: 65535
     t.integer  "created_by", limit: 4
     t.integer  "updated_by", limit: 4
-    t.datetime "created_at",               null: false
-    t.datetime "updated_at",               null: false
+    t.datetime "created_at",                               null: false
+    t.datetime "updated_at",                               null: false
   end
 
   create_table "sms_codes", force: :cascade do |t|
@@ -140,19 +177,19 @@ ActiveRecord::Schema.define(version: 20160216200145) do
 
   create_table "twitters", force: :cascade do |t|
     t.text     "content",     limit: 65535
-    t.integer  "author",      limit: 4,                     null: false
-    t.integer  "designer",    limit: 4,                     null: false
+    t.integer  "author_id",   limit: 4,                     null: false
+    t.integer  "designer_id", limit: 4,                     null: false
     t.string   "latitude",    limit: 255
     t.string   "longtitude",  limit: 255
     t.integer  "image_count", limit: 4
     t.boolean  "deleted",                   default: false
-    t.integer  "stars",       limit: 4
+    t.integer  "stars",       limit: 4,                     null: false
     t.datetime "created_at",                                null: false
     t.datetime "updated_at",                                null: false
   end
 
-  add_index "twitters", ["author"], name: "index_twitters_on_author", using: :btree
-  add_index "twitters", ["designer"], name: "index_twitters_on_designer", using: :btree
+  add_index "twitters", ["author_id"], name: "index_twitters_on_author_id", using: :btree
+  add_index "twitters", ["designer_id"], name: "index_twitters_on_designer_id", using: :btree
 
   create_table "users", force: :cascade do |t|
     t.string   "name",         limit: 255,                    null: false
@@ -160,7 +197,7 @@ ActiveRecord::Schema.define(version: 20160216200145) do
     t.string   "phone_number", limit: 255,                    null: false
     t.integer  "image_id",     limit: 4
     t.integer  "vitality",     limit: 4,   default: 0
-    t.string   "status",       limit: 255, default: "nomal"
+    t.string   "status",       limit: 255, default: "normal"
     t.datetime "created_at",                                  null: false
     t.datetime "updated_at",                                  null: false
   end
@@ -192,16 +229,22 @@ ActiveRecord::Schema.define(version: 20160216200145) do
   add_foreign_key "account_logs", "users", column: "to_user"
   add_foreign_key "accounts", "users"
   add_foreign_key "ad_images", "images"
+  add_foreign_key "commissioners", "images", column: "code_image_id"
   add_foreign_key "designers", "shops"
   add_foreign_key "designers", "users"
   add_foreign_key "favorite_designers", "designers"
   add_foreign_key "favorite_designers", "users"
   add_foreign_key "favorite_images", "images"
   add_foreign_key "favorite_images", "users"
+  add_foreign_key "images", "images", column: "original_image_id"
   add_foreign_key "messages", "users"
+  add_foreign_key "promotion_logs", "commissioners", column: "c_id"
+  add_foreign_key "shop_promotion_logs", "commissioners", column: "c_id"
+  add_foreign_key "shop_promotion_logs", "shops"
   add_foreign_key "twitter_images", "images"
-  add_foreign_key "twitters", "designers", column: "designer"
-  add_foreign_key "twitters", "users", column: "author"
+  add_foreign_key "twitter_images", "twitters"
+  add_foreign_key "twitters", "designers"
+  add_foreign_key "twitters", "users", column: "author_id"
   add_foreign_key "users", "images"
   add_foreign_key "vita_images", "images"
   add_foreign_key "vita_images", "vitae", column: "vita_id"

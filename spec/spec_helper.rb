@@ -22,6 +22,10 @@ require 'factories/vita_image'
 require 'factories/message'
 require 'factories/favorite_image'
 require 'factories/favorite_designer'
+require 'factories/commissioner'
+require 'factories/promotion_log'
+require 'factories/shop_promotion_log'
+
 
 RSpec.configure do |config|
   config.include FactoryGirl::Syntax::Methods

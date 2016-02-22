@@ -1,3 +1,4 @@
+#encoding:utf-8
 module Pandora
   module Common
     module TimeHelper

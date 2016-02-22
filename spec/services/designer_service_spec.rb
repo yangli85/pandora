@@ -86,14 +86,14 @@ describe Pandora::Services::DesignerService do
     let(:designer) { create(:designer, user: user) }
 
     before do
-      s_image1 = create(:image)
-      s_image2 = create(:image)
-      s_image3 = create(:image)
-      s_image4 = create(:image)
-      image1 = create(:image, s_image: s_image1)
-      image2 = create(:image, s_image: s_image2)
-      image3 = create(:image, s_image: s_image3)
-      image4 = create(:image, s_image: s_image4)
+      image1 = create(:image)
+      image2 = create(:image)
+      image3 = create(:image)
+      image4 = create(:image)
+      s_image1 = create(:image, original_image: image1)
+      s_image2 = create(:image, original_image: image2)
+      s_image3 = create(:image, original_image: image3)
+      s_image4 = create(:image, original_image: image4)
       vita1 = create(:vita, designer: designer)
       vita2 = create(:vita, designer: designer)
       vita3 = create(:vita, designer: designer)
@@ -127,12 +127,12 @@ describe Pandora::Services::DesignerService do
     describe '#delete_designer_vitae' do
       it "should can delete muiltiple vitae" do
         subject.delete_designer_vitae designer.vitae.map(&:id)
-        expect(Pandora::Models::Vita.count).to eq 0
+        expect(designer.vitae.count).to eq 0
       end
 
       it "should can delete single vitae" do
         subject.delete_designer_vitae designer.vitae.first.id
-        expect(Pandora::Models::Vita.count).to eq 3
+        expect(designer.vitae.count).to eq 3
       end
 
       it "should delete vita's vita_images" do
@@ -257,6 +257,15 @@ describe Pandora::Services::DesignerService do
     it 'should update designer shop' do
       subject.update_shop designer.id, new_shop.id
       expect(Pandora::Models::Designer.find(designer.id).shop).to eq new_shop
+    end
+  end
+
+  describe '#update_designer' do
+    let(:user) { create(:user) }
+    let(:designer) { create(:designer, {shop: shop, user: user}) }
+    it "should update designer totally_stars" do
+      subject.update_designer designer.id, 'totally_stars', 10
+      expect(Pandora::Models::Designer.find(designer.id).totally_stars).to eq 10
     end
   end
 end

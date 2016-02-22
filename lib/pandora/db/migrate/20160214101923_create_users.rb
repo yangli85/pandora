@@ -6,7 +6,7 @@ class CreateUsers < ActiveRecord::Migration
       t.string :phone_number, :null => false
       t.integer :image_id
       t.integer :vitality, :default => 0
-      t.string :status, :default => :nomal
+      t.string :status, :default => :normal
       t.timestamps :null => false
     end
     add_index :users, :phone_number

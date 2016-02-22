@@ -71,9 +71,9 @@ describe Pandora::Services::ShopService do
 
   describe "#search_shops" do
     before do
-      create(:shop,name: 'new beauty')
-      create(:shop,name: 'new Man')
-      create(:shop,name: 'new Style')
+      create(:shop, name: 'new beauty')
+      create(:shop, name: 'new Man')
+      create(:shop, name: 'new Style')
     end
 
     it "should return matched shop" do
@@ -81,6 +81,22 @@ describe Pandora::Services::ShopService do
       expect(subject.search_shops('man').count).to eq 1
       expect(subject.search_shops('Sty').count).to eq 1
       expect(subject.search_shops('Styaa').count).to eq 0
+    end
+  end
+
+  describe "#get_similar_shops" do
+
+    before do
+      create(:shop, {name: "new shop 1", address: 'ZhuQue Street Building7', latitude: '100.170', longtitude: '100.10', })
+      create(:shop, {name: "new shop 2", address: 'ZhuQue Street Building8', latitude: '100.130', longtitude: '100.170', })
+      create(:shop, {name: "new shop 2", address: 'ZhuQue Street Building8', latitude: '100.130', longtitude: '100.10', })
+      create(:shop, {name: "new shop 3", address: 'YanNan Street Building9', latitude: '100.100', longtitude: '100.100', })
+    end
+
+    it "should return shop's that all attibutes are similar with input" do
+      expect(subject.get_similar_shops("new shop", "ZhuQue Street", '100.10','100.10').count).to eq 1
+      expect(subject.get_similar_shops("new shop", "ChangQing Street", '100.10','100.10').count).to eq 0
+      expect(subject.get_similar_shops("new shop", "ZhuQue Street", '100.10','99.90').count).to eq 0
     end
   end
 end

@@ -4,19 +4,19 @@ module Pandora
   module Models
     class User < Pandora::Models::Base
       enum genders: [:male, :female, :unknow]
-      enum statuses: [:nomal, :black]
+      enum statuses: [:normal, :black]
       validates :gender, inclusion: {in: genders.keys}
       validates :status, inclusion: {in: statuses.keys}
       validates :phone_number, :uniqueness => true, :format => {:with => /\A[\d]{11}\z/}
-      has_one :account, class_name: "Pandora::Models::Account"
-      has_many :twitters, class_name: "Pandora::Models::Twitter", foreign_key: :author
-      has_many :messages
-      has_many :favorite_images
-      has_many :favorite_designers
-      has_many :favorited_images, through: :favorite_images
-      has_many :favorited_designers, through: :favorite_designers
-      has_one :designer
-      belongs_to :avatar, class_name: "Pandora::Models::Image", foreign_key: :image_id
+      has_many :twitters, class_name: "Pandora::Models::Twitter", foreign_key: :author_id, dependent: :destroy
+      has_many :messages, dependent: :destroy
+      has_many :favorite_images, dependent: :destroy
+      has_many :favorite_designers, dependent: :destroy
+      has_many :favorited_images, through: :favorite_images, dependent: :destroy
+      has_many :favorited_designers, through: :favorite_designers, dependent: :destroy
+      has_one :designer, dependent: :destroy
+      has_one :account, dependent: :destroy
+      belongs_to :avatar, class_name: "Pandora::Models::Image", foreign_key: :image_id, dependent: :destroy
 
       def attributes
         {

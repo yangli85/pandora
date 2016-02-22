@@ -7,7 +7,7 @@ module Pandora
       validates :twitter_id, :presence => true
       validates :rank, :presence => true
       belongs_to :twitter
-      belongs_to :image, class_name: "Pandora::Models::Image"
+      belongs_to :image, class_name: "Pandora::Models::Image", dependent: :destroy
 
       def images
         {

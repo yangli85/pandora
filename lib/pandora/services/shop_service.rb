@@ -18,7 +18,8 @@ module Pandora
                + SIN( RADIANS(#{latitude}) )
                * SIN( RADIANS( latitude ) ) ) ) AS distance
         FROM shops
-        WHERE  latitude BETWEEN #{s_lat} AND #{b_lat}
+        WHERE  deleted = false
+        AND latitude BETWEEN #{s_lat} AND #{b_lat}
         AND longtitude BETWEEN #{s_lon} AND #{b_lon}
         HAVING distance < #{range} ORDER BY distance;
 EOSQL
@@ -26,19 +27,27 @@ EOSQL
       end
 
       def get_shop_designers shop_id
-        Pandora::Models::Shop.find(shop_id).designers
+        Pandora::Models::Shop.active.find(shop_id).designers
       end
 
       def get_shop shop_id
-        Pandora::Models::Shop.find(shop_id)
+        Pandora::Models::Shop.active.find(shop_id)
       end
 
       def create_shop name, address, latitude, longtitude
-        Pandora::Models::Shop.create!(name: name, address: address, latitude: latitude, longtitude: longtitude)
+        Pandora::Models::Shop.active.create!(name: name, address: address, latitude: latitude, longtitude: longtitude)
       end
 
       def search_shops query
-        Pandora::Models::Shop.where("name like ?", "%#{query}%")
+        Pandora::Models::Shop.active.where("name like ?", "%#{query}%")
+      end
+
+      def shops page_size, current_page, order_by
+        Pandora::Models::Shop.order("#{order_by desc}").limit(page_size).offset(page_size*(current_page-1))
+      end
+
+      def get_similar_shops name, address, longtitude, latitude
+        Pandora::Models::Shop.where("name like ? and address like ? and abs(latitude - #{latitude}) <0.05 and abs(longtitude - #{longtitude}) <0.05", "%#{name}%", "%#{address}%")
       end
 
       private

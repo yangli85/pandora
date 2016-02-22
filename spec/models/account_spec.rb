@@ -5,7 +5,7 @@ require 'pandora/models/account_log'
 
 describe Pandora::Models::Account do
   let(:user) { create(:user) }
-  let(:account) { create(:account, user: user) }
+  let(:account) { create(:account, user_id: user.id) }
 
   describe 'belong to' do
     it "should get related user info by account" do
@@ -32,6 +32,13 @@ describe Pandora::Models::Account do
 
     it "should raise error if user_id is invalide" do
       expect { create(:account, user_id: 'not exist user') }.to raise_error StandardError
+    end
+  end
+
+  describe "destroy dependent" do
+    it "should delete all logs for account if delete account" do
+      account.destroy
+      expect(Pandora::Models::AccountLog.count).to eq 0
     end
   end
 end

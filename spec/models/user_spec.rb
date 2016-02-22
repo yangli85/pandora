@@ -131,4 +131,17 @@ describe Pandora::Models::User do
       end
     end
   end
+
+  describe "dependent to" do
+    before do
+      avatar = create(:image)
+      s_avatar = create(:image, original_image: avatar)
+      user.update(avatar: avatar)
+    end
+
+    it "should delete user's avatar if user deleted" do
+      user.destroy
+      expect(Pandora::Models::Image.count).to eq 0
+    end
+  end
 end

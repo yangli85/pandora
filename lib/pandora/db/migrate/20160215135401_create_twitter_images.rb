@@ -9,5 +9,6 @@ class CreateTwitterImages < ActiveRecord::Migration
     end
     add_index :twitter_images, :twitter_id
     add_foreign_key "twitter_images", "images", :column => "image_id"
+    add_foreign_key "twitter_images", "twitters", :column => "twitter_id"
   end
 end

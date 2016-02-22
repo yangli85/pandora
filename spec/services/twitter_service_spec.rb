@@ -4,12 +4,16 @@ describe Pandora::Services::TwitterService do
   let(:author) { create(:user, phone_number: '13800000001') }
   let(:user) { create(:user, phone_number: '13800000002') }
   let(:designer) { create(:designer, user: user) }
-  let(:s_image) { create(:image, category: 'twitter') }
-  let(:image1) { create(:image, {category: 'twitter', s_image: s_image}) }
-  let(:image2) { create(:image, {category: 'twitter', s_image: s_image}) }
-  let(:image3) { create(:image, {category: 'twitter', s_image: s_image}) }
-  let(:image4) { create(:image, {category: 'twitter', s_image: s_image}) }
-  let(:image5) { create(:image, {category: 'twitter', s_image: s_image}) }
+  let(:image1) { create(:image, category: 'twitter') }
+  let(:image2) { create(:image, category: 'twitter') }
+  let(:image3) { create(:image, category: 'twitter') }
+  let(:image4) { create(:image, category: 'twitter') }
+  let(:image5) { create(:image, category: 'twitter') }
+  let(:s_image1) { create(:image, {category: 'twitter', original_image: image1}) }
+  let(:s_image2) { create(:image, {category: 'twitter', original_image: image2}) }
+  let(:s_image3) { create(:image, {category: 'twitter', original_image: image3}) }
+  let(:s_image4) { create(:image, {category: 'twitter', original_image: image4}) }
+  let(:s_image5) { create(:image, {category: 'twitter', original_image: image5}) }
   let(:twitter1) { create(:twitter, {author: author, designer: designer}) }
   let(:twitter2) { create(:twitter, {author: author, designer: designer}) }
 
@@ -119,7 +123,15 @@ describe Pandora::Services::TwitterService do
       subject.create_twitter(fake_author_id, fake_designer_id, fake_content, fake_image_paths, fake_stars, nil, nil, fake_twitter_images_folder)
       twitter = Pandora::Models::Twitter.last
       expect(twitter.images.map(&:url)).to eq(["twitter_images/1.jpg", "twitter_images/2.jpg"])
-      expect(twitter.images.map(&:s_image).map(&:url)).to eq(["twitter_images/s_1.jpg", "twitter_images/s_2.jpg"])
+      expect(twitter.images.map(&:s_url)).to eq(["twitter_images/s_1.jpg", "twitter_images/s_2.jpg"])
+    end
+  end
+
+  describe "#update_twitter_image_likes" do
+    it "should update twitter image likes" do
+      old_likes = twitter1.likes
+      subject.update_twitter_image_likes twitter1.id, image1.id
+      expect(Pandora::Models::Twitter.find(twitter1.id).likes - old_likes).to eq 1
     end
   end
 end

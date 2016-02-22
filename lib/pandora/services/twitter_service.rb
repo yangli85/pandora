@@ -35,12 +35,17 @@ module Pandora
         twitter = Pandora::Models::Twitter.create!(author: author, designer: designer, content: content, latitude: latitude, longtitude: longtitude, stars: stars, image_count: image_paths.length)
 
         image_paths.each_with_index do |path, index|
-          s_image_path = move_image_to path[:s_image_path], twitter_images_folder
-          s_image = Pandora::Models::Image.create!(category: 'twitter', url: s_image_path)
           image_path = move_image_to path[:image_path], twitter_images_folder
-          image = Pandora::Models::Image.create!(category: 'twitter', url: image_path, s_image: s_image)
+          image = Pandora::Models::Image.create!(category: 'twitter', url: image_path)
+          s_image_path = move_image_to path[:s_image_path], twitter_images_folder
+          s_image = Pandora::Models::Image.create!(category: 'twitter', url: s_image_path, original_image: image)
           Pandora::Models::TwitterImage.create!(twitter_id: twitter.id, image: image, rank: index+1)
         end
+      end
+
+      def update_twitter_image_likes twitter_id, image_id
+        twitter_image = Pandora::Models::TwitterImage.find_by_twitter_id_and_image_id(twitter_id, image_id)
+        twitter_image.update(likes: twitter_image.likes+1) unless twitter_image.nil?
       end
     end
   end

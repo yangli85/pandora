@@ -43,10 +43,10 @@ module Pandora
         designer =Pandora::Models::Designer.find(designer_id)
         vita = Pandora::Models::Vita.create!(designer: designer, desc: desc)
         image_paths.each do |path|
-          s_image_path = move_image_to path[:s_image_path], vita_image_folder
-          s_image = Pandora::Models::Image.create!(category: 'vita', url: s_image_path)
           image_path = move_image_to path[:image_path], vita_image_folder
-          image = Pandora::Models::Image.create!(category: 'vita', s_image: s_image, url: image_path)
+          image = Pandora::Models::Image.create!(category: 'vita', url: image_path)
+          s_image_path = move_image_to path[:s_image_path], vita_image_folder
+          s_image = Pandora::Models::Image.create!(category: 'vita', original_image: image, url: s_image_path)
           Pandora::Models::VitaImage.create!(image: image, vita: vita)
         end
       end
@@ -80,6 +80,12 @@ module Pandora
       def delete_twitter designer_id, twitter_id
         Pandora::Models::Twitter.where(designer: designer_id, id: twitter_id).update_all(deleted: true)
       end
+
+      def update_designer designer_id, column, value
+        designer = Pandora::Models::Designer.find designer_id
+        designer.update(column.to_sym => value)
+      end
+
     end
   end
 end

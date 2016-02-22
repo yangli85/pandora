@@ -2,7 +2,6 @@ require 'spec_helper'
 require 'pandora/models/image'
 
 describe Pandora::Models::Image do
-
   describe 'validate' do
     context 'error' do
       it 'should raise error if url is nil' do
@@ -34,6 +33,21 @@ describe Pandora::Models::Image do
       it "shoud create image successfully if url is right" do
         expect { create(:image, url: 'images/1.jpg') }.not_to raise_error
       end
+    end
+  end
+
+  describe "has s_image" do
+    let(:image) { create(:image) }
+    let(:s_image) { create(:image, original_image_id: image.id) }
+
+    it "should return image's s_images" do
+      expect(image.s_images).to eq [s_image]
+    end
+
+    it "should delete small image if delete image" do
+      s_image_id = s_image.id
+      image.destroy
+      expect { Pandora::Models::Image.find(s_image_id) }.to raise_error ActiveRecord::RecordNotFound
     end
   end
 end

@@ -11,8 +11,8 @@ describe Pandora::Models::Vita do
   let(:vita) { create(:vita, designer: designer) }
   before do
     s_image = create(:image)
-    image1 = create(:image, s_image: s_image)
-    image2 = create(:image)
+    image1 = create(:image)
+    image2 = create(:image, original_image: image1)
     create(:vita_image, {image: image1, vita: vita})
     create(:vita_image, {image: image2, vita: vita})
   end

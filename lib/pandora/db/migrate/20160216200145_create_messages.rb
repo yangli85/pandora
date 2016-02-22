@@ -3,7 +3,7 @@ class CreateMessages < ActiveRecord::Migration
     create_table :messages do |t|
       t.integer :user_id, :null => false
       t.text :content
-      t.boolean :is_new, :default => false
+      t.boolean :is_new, :default => true
       t.timestamps :null => false
     end
     add_index :messages, :user_id

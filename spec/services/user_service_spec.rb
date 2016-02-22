@@ -1,5 +1,6 @@
 require 'pandora/services/user_service'
 require 'pandora/models/twitter'
+require 'pandora/models/twitter_image'
 require 'pandora/models/account_log'
 
 describe Pandora::Services::UserService do
@@ -69,7 +70,7 @@ describe Pandora::Services::UserService do
       subject.update_user_avatar user.id, fake_image_path, fake_avatar_images_folder
       expect(Pandora::Models::User.find(user.id).avatar.attributes).to eq (
                                                                               {
-                                                                                  :id => 2,
+                                                                                  :id => 1,
                                                                                   :url => "avatar_images/1.jpg",
                                                                                   :s_url => "avatar_images/s_1.jpg"
                                                                               }
@@ -322,6 +323,16 @@ describe Pandora::Services::UserService do
     describe "#get_messages" do
       it "should return all user's new messages" do
         expect(subject.get_messages(user.id).count).to eq 4
+      end
+    end
+
+    describe "#create_message" do
+      it "should create new message for user" do
+        user.messages.destroy_all
+        subject.create_message user.id, "new message"
+        expect(Pandora::Models::User.find(user.id).messages.count).to eq 1
+        expect(Pandora::Models::User.find(user.id).messages.first.content).to eq "new message"
+        expect(Pandora::Models::User.find(user.id).messages.first.is_new).to eq true
       end
     end
 
