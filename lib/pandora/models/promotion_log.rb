@@ -3,7 +3,7 @@ require 'pandora/models/base'
 module Pandora
   module Models
     class PromotionLog < Pandora::Models::Base
-      validates :phone_number, :format => {:with => /\A[\d]{11}\z/} , unless: 'phone_number.nil?'
+      validates :phone_number, :format => {:with => /\A[\d]{11}\z/}, unless: 'phone_number.nil?'
       belongs_to :commissioner, foreign_key: :c_id
       validates :commissioner, :presence => true
 

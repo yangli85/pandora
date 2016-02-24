@@ -7,7 +7,7 @@ class CreateShops < ActiveRecord::Migration
       t.string :longtitude, :null => false
       t.string :scale
       t.string :category
-      t.boolean :deleted,:default => false
+      t.boolean :deleted, :default => false
       t.text :desc
       t.integer :created_by
       t.integer :updated_by

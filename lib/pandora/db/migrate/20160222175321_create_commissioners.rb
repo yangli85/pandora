@@ -6,6 +6,7 @@ class CreateCommissioners < ActiveRecord::Migration
       t.string :password, :default => '888888', :limit => 10
       t.integer :code_image_id
       t.string :status, :default => 'normal'
+      t.integer :be_scanned_times, :default => 0
       t.timestamps :null => false
     end
     add_index :commissioners, :phone_number

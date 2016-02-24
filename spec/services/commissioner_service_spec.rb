@@ -55,6 +55,13 @@ describe Pandora::Services::CommissionerService do
     end
   end
 
+  describe "#update_commssioner_scaned_times" do
+    it "should update commissioner's scaned_times +1" do
+      subject.update_commssioner_scanned_times commissioner.id
+      expect(Pandora::Models::Commissioner.find(commissioner.id).be_scanned_times).to be 1
+    end
+  end
+
   describe "commissioner_promotion_logs" do
     let(:fake_phone1) { '13811111111' }
     let(:fake_phone2) { '13811111112' }
@@ -80,12 +87,12 @@ describe Pandora::Services::CommissionerService do
       end
     end
 
-    describe "#update_promotion_log" do
+    describe "#delete_promotion_log" do
       let(:fake_log) { commissioner.promotion_logs.first }
 
-      it "should update commissioner logs's phone_number" do
-        subject.update_promotion_log fake_log.id, "13800000000"
-        expect(Pandora::Models::PromotionLog.find(fake_log.id).phone_number).to eq "13800000000"
+      it "should delete commissioner logs's phone_number" do
+        subject.delete_promotion_log fake_log.id
+        expect(Pandora::Models::Commissioner.find(commissioner.id).promotion_logs.count).to eq 3
       end
     end
 
@@ -202,19 +209,35 @@ describe Pandora::Services::CommissionerService do
     let(:scale) { "middle" }
     let(:category) { "underside" }
     let(:desc) { "very fastion" }
+    let(:shop_images_folder) { "images/shop" }
+    let(:image_paths) {
+      [
+          {
+              image_path: 'images/1.jpg',
+              s_image_path: 'images/s_1.jpg'
+          },
+          {
+              image_path: 'images/2.jpg',
+              s_image_path: 'images/s_2.jpg'
+          }
+      ]
+    }
 
     before do
       Pandora::Models::Shop.destroy_all
+      allow(FileUtils).to receive(:mv)
     end
 
     it "should create new shop with correct attributes" do
-      new_shop = subject.register_shop name, address, longtitude, latitude, scale, category, desc
+      subject.register_shop name, address, longtitude, latitude, scale, category, desc, image_paths, shop_images_folder
+      new_shop = Pandora::Models::Shop.first
       expect(new_shop.name).to eq name
       expect(new_shop.address).to eq address
       expect(new_shop.longtitude).to eq longtitude
       expect(new_shop.latitude).to eq latitude
       expect(new_shop.scale).to eq scale
       expect(new_shop.desc).to eq desc
+      expect(new_shop.images.count).to eq 2
     end
   end
 end

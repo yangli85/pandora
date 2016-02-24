@@ -16,7 +16,7 @@ module Pandora
             id: id,
             name: name,
             phone_number: phone_number,
-            code_image: code_image.url
+            code_image: code_image && code_image.url
         }
       end
     end

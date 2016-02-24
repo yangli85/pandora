@@ -94,9 +94,9 @@ describe Pandora::Services::ShopService do
     end
 
     it "should return shop's that all attibutes are similar with input" do
-      expect(subject.get_similar_shops("new shop", "ZhuQue Street", '100.10','100.10').count).to eq 1
-      expect(subject.get_similar_shops("new shop", "ChangQing Street", '100.10','100.10').count).to eq 0
-      expect(subject.get_similar_shops("new shop", "ZhuQue Street", '100.10','99.90').count).to eq 0
+      expect(subject.get_similar_shops("new shop", "ZhuQue Street", '100.10', '100.10').count).to eq 1
+      expect(subject.get_similar_shops("new shop", "ChangQing Street", '100.10', '100.10').count).to eq 0
+      expect(subject.get_similar_shops("new shop", "ZhuQue Street", '100.10', '99.90').count).to eq 0
     end
   end
 end

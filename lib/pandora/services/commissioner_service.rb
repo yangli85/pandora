@@ -5,6 +5,7 @@ require 'pandora/common/service_helper'
 require 'pandora/models/image'
 require 'pandora/models/user'
 require 'pandora/models/designer'
+require 'pandora/models/shop_image'
 require 'pandora/models/shop'
 
 module Pandora
@@ -13,11 +14,16 @@ module Pandora
       include Pandora::Common::ServiceHelper
 
       def get_commissioner phone_number
-        Pandora::Models::Commissioner.find_by_phone_number!(phone_number)
+        Pandora::Models::Commissioner.find_by_phone_number(phone_number)
       end
 
       def get_commissioner_by_id id
         Pandora::Models::Commissioner.find(id)
+      end
+
+      def update_commssioner_scanned_times c_id
+        commissioner = Pandora::Models::Commissioner.find(c_id)
+        commissioner.update(be_scanned_times: commissioner.be_scanned_times+1)
       end
 
       def register phone_number, name, password, code_image_path, code_image_folder
@@ -36,8 +42,8 @@ module Pandora
         commissioner.promotion_logs.count
       end
 
-      def update_promotion_log log_id, phone_number
-        Pandora::Models::PromotionLog.find(log_id).update(phone_number: phone_number)
+      def delete_promotion_log log_id
+        Pandora::Models::PromotionLog.find(log_id).destroy
       end
 
       def add_promotion_log c_id, user_phone_number, mobile_type
@@ -46,7 +52,7 @@ module Pandora
 
       def get_promotion_users c_id
         phone_numbers = Pandora::Models::PromotionLog.select(:phone_number).where(c_id: c_id).uniq
-        users = Pandora::Models::User.where(phone_number: phone_numbers)
+        Pandora::Models::User.where(phone_number: phone_numbers)
       end
 
       def get_promotion_designers c_id
@@ -57,6 +63,10 @@ module Pandora
 
       def get_shop_promotion_logs c_id, shop_id, page_size, current_page
         Pandora::Models::ShopPromotionLog.where(c_id: c_id, shop_id: shop_id).limit(page_size).offset(page_size*(current_page-1))
+      end
+
+      def get_shop_all_promotion_logs shop_id, page_size, current_page
+        Pandora::Models::ShopPromotionLog.where(shop_id: shop_id).limit(page_size).offset(page_size*(current_page-1))
       end
 
       def add_shop_promotion_log c_id, shop_id, content
@@ -71,8 +81,15 @@ module Pandora
         Pandora::Models::Shop.active.find(shop_id).update(deleted: true)
       end
 
-      def register_shop name, address, longtitude, latitude, scale, category, desc
-        Pandora::Models::Shop.create!(name: name, address: address, longtitude: longtitude, latitude: latitude, scale: scale, category: category, desc: desc)
+      def register_shop name, address, longtitude, latitude, scale, category, desc, image_paths, shop_images_folder
+        shop = Pandora::Models::Shop.create!(name: name, address: address, longtitude: longtitude, latitude: latitude, scale: scale, category: category, desc: desc)
+        image_paths.each_with_index do |path, index|
+          image_path = move_image_to path[:image_path], shop_images_folder
+          image = Pandora::Models::Image.create!(category: 'twitter', url: image_path)
+          s_image_path = move_image_to path[:s_image_path], shop_images_folder
+          s_image = Pandora::Models::Image.create!(category: 'twitter', url: s_image_path, original_image: image)
+          Pandora::Models::ShopImage.create!(shop_id: shop.id, image: image)
+        end
       end
     end
   end

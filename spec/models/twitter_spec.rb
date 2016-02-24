@@ -118,7 +118,7 @@ describe Pandora::Models::Twitter do
                           {
                               :id => 2,
                               :url => "images/1.jpg",
-                              :s_url=>"images/1.jpg"
+                              :s_url => "images/1.jpg"
                           },
                       :likes => 2,
                       :rank => 1

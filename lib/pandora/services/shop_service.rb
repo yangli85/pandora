@@ -43,11 +43,11 @@ EOSQL
       end
 
       def shops page_size, current_page, order_by
-        Pandora::Models::Shop.order("#{order_by desc}").limit(page_size).offset(page_size*(current_page-1))
+        Pandora::Models::Shop.active.order("#{order_by} desc").limit(page_size).offset(page_size*(current_page-1))
       end
 
       def get_similar_shops name, address, longtitude, latitude
-        Pandora::Models::Shop.where("name like ? and address like ? and abs(latitude - #{latitude}) <0.05 and abs(longtitude - #{longtitude}) <0.05", "%#{name}%", "%#{address}%")
+        Pandora::Models::Shop.active.where("name like ? and address like ? and abs(latitude - #{latitude}) <0.05 and abs(longtitude - #{longtitude}) <0.05", "%#{name}%", "%#{address}%")
       end
 
       private
