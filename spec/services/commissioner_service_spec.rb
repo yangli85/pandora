@@ -130,8 +130,10 @@ describe Pandora::Services::CommissionerService do
         create(:user, phone_number: fake_phone2)
       end
 
-      it "should return all commissioner's user" do
-        expect(subject.get_promotion_users(commissioner.id).count).to eq 2
+      it "should return all commissioner's user of current page" do
+        expect(subject.get_promotion_users(commissioner.id,2,1).count).to eq 2
+        expect(subject.get_promotion_users(commissioner.id,1,2).count).to eq 1
+        expect(subject.get_promotion_users(commissioner.id,5,2).count).to eq 0
       end
     end
 
@@ -143,7 +145,9 @@ describe Pandora::Services::CommissionerService do
       end
 
       it "should return all commissioner's designers" do
-        expect(subject.get_promotion_designers(commissioner.id).count).to eq 1
+        expect(subject.get_promotion_designers(commissioner.id,2,1).count).to eq 1
+        expect(subject.get_promotion_designers(commissioner.id,1,1).count).to eq 1
+        expect(subject.get_promotion_designers(commissioner.id,1,2).count).to eq 0
       end
     end
   end
@@ -229,8 +233,7 @@ describe Pandora::Services::CommissionerService do
     end
 
     it "should create new shop with correct attributes" do
-      subject.register_shop name, address, longtitude, latitude, scale, category, desc, image_paths, shop_images_folder
-      new_shop = Pandora::Models::Shop.first
+      new_shop = subject.register_shop name, address, longtitude, latitude, scale, category, desc, image_paths, shop_images_folder
       expect(new_shop.name).to eq name
       expect(new_shop.address).to eq address
       expect(new_shop.longtitude).to eq longtitude

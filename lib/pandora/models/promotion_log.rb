@@ -12,7 +12,7 @@ module Pandora
             id: id,
             phone_number: phone_number,
             mobile_type: mobile_type,
-            commissioner: commissioner.attributes
+            created_at: created_at
         }
       end
     end

@@ -77,10 +77,10 @@ describe Pandora::Services::ShopService do
     end
 
     it "should return matched shop" do
-      expect(subject.search_shops('new').count).to eq 3
-      expect(subject.search_shops('man').count).to eq 1
-      expect(subject.search_shops('Sty').count).to eq 1
-      expect(subject.search_shops('Styaa').count).to eq 0
+      expect(subject.search_shops('new',3,1,'created_at').count).to eq 3
+      expect(subject.search_shops('man',1,1,'created_at').count).to eq 1
+      expect(subject.search_shops('Sty',1,1,'created_at').count).to eq 1
+      expect(subject.search_shops('Styaa',1,1,'created_at').count).to eq 0
     end
   end
 

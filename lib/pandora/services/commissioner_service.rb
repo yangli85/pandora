@@ -50,23 +50,23 @@ module Pandora
         Pandora::Models::PromotionLog.create!(c_id: c_id, phone_number: user_phone_number, mobile_type: mobile_type)
       end
 
-      def get_promotion_users c_id
-        phone_numbers = Pandora::Models::PromotionLog.select(:phone_number).where(c_id: c_id).uniq
-        Pandora::Models::User.where(phone_number: phone_numbers)
+      def get_promotion_users c_id, page_size, current_page
+        phone_numbers = Pandora::Models::PromotionLog.select(:phone_number).order("created_at desc").where(c_id: c_id).uniq
+        Pandora::Models::User.where(phone_number: phone_numbers).order("created_at desc").limit(page_size).offset(page_size*(current_page-1))
       end
 
-      def get_promotion_designers c_id
+      def get_promotion_designers c_id, page_size, current_page
         phone_numbers = Pandora::Models::PromotionLog.select(:phone_number).where(c_id: c_id).uniq
         user_ids = Pandora::Models::User.select(:id).where(phone_number: phone_numbers)
-        Pandora::Models::Designer.where(user_id: user_ids)
+        Pandora::Models::Designer.where(user_id: user_ids).order("created_at desc").limit(page_size).offset(page_size*(current_page-1))
       end
 
       def get_shop_promotion_logs c_id, shop_id, page_size, current_page
-        Pandora::Models::ShopPromotionLog.where(c_id: c_id, shop_id: shop_id).limit(page_size).offset(page_size*(current_page-1))
+        Pandora::Models::ShopPromotionLog.where(c_id: c_id, shop_id: shop_id).order("created_at desc").limit(page_size).offset(page_size*(current_page-1))
       end
 
       def get_shop_all_promotion_logs shop_id, page_size, current_page
-        Pandora::Models::ShopPromotionLog.where(shop_id: shop_id).limit(page_size).offset(page_size*(current_page-1))
+        Pandora::Models::ShopPromotionLog.where(shop_id: shop_id).order("created_at desc").limit(page_size).offset(page_size*(current_page-1))
       end
 
       def add_shop_promotion_log c_id, shop_id, content
@@ -90,6 +90,7 @@ module Pandora
           s_image = Pandora::Models::Image.create!(category: 'twitter', url: s_image_path, original_image: image)
           Pandora::Models::ShopImage.create!(shop_id: shop.id, image: image)
         end
+        shop
       end
     end
   end

@@ -11,9 +11,9 @@ module Pandora
       def attributes
         {
             id: id,
-            shop: shop.attributes,
-            commissioner: commissioner.attributes,
-            content: content
+            content: content,
+            commissioner: commissioner && commissioner.attributes,
+            created_at: created_at
         }
       end
     end
