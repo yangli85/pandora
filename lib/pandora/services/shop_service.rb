@@ -43,7 +43,7 @@ EOSQL
       end
 
       def search_shops_by_name name
-        Pandora::Models::Shop.active.where("name like ?", "%#{name}%").order("#{created_at} desc")
+        Pandora::Models::Shop.active.where("name like ?", "%#{name}%").order("created_at desc")
       end
 
       def shops page_size, current_page, order_by
