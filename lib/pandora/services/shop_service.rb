@@ -42,6 +42,10 @@ EOSQL
         Pandora::Models::Shop.active.where("name like ?", "%#{query}%").order("#{order_by} desc").limit(page_size).offset(page_size*(current_page-1))
       end
 
+      def search_shops_by_name name
+        Pandora::Models::Shop.active.where("name like ?", "%#{name}%").order("#{created_at} desc")
+      end
+
       def shops page_size, current_page, order_by
         Pandora::Models::Shop.active.order("#{order_by} desc").limit(page_size).offset(page_size*(current_page-1))
       end

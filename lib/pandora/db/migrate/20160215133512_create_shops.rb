@@ -9,8 +9,6 @@ class CreateShops < ActiveRecord::Migration
       t.string :category
       t.boolean :deleted, :default => false
       t.text :desc
-      t.integer :created_by
-      t.integer :updated_by
       t.timestamps :null => false
     end
   end
