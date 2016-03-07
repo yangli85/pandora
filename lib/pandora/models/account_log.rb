@@ -15,6 +15,7 @@ module Pandora
         {
             id: id,
             desc: desc,
+            balance: balance,
             created_at: relative_time(created_at)
         }
       end
