@@ -3,7 +3,7 @@ module Pandora
   module Common
     module TimeHelper
       def relative_time(start_time)
-        diff_seconds = ((Time.now - start_time)* 24 * 60 * 60).to_i
+        diff_seconds = (Time.now - start_time).to_i
         case diff_seconds
           when 0 .. 59
             "1分钟内"
