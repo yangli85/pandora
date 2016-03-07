@@ -8,11 +8,11 @@ describe Pandora::Services::ShopService do
 
   describe "#get_vicinal_shops" do
     before do
-      create(:shop, latitude: '34.2620', longtitude: '108.9430')
-      create(:shop, latitude: '34.2620', longtitude: '108.9440')
-      create(:shop, latitude: '34.3620', longtitude: '108.9630')
-      create(:shop, latitude: '34.2320', longtitude: '108.9930')
-      create(:shop, latitude: '34.2420', longtitude: '108.9430')
+      create(:shop, latitude: '34.2620', longitude: '108.9430')
+      create(:shop, latitude: '34.2620', longitude: '108.9440')
+      create(:shop, latitude: '34.3620', longitude: '108.9630')
+      create(:shop, latitude: '34.2320', longitude: '108.9930')
+      create(:shop, latitude: '34.2420', longitude: '108.9430')
     end
 
     it "should return all vicinal shops in the range" do
@@ -58,14 +58,14 @@ describe Pandora::Services::ShopService do
     let(:fake_name) { 'new shop' }
     let(:fake_address) { 'zhuque street No1 new building' }
     let(:fake_latitude) { '105.124' }
-    let(:fake_longtitude) { '205.124' }
+    let(:fake_longitude) { '205.124' }
 
     it "should create shop correctly" do
-      shop = subject.create_shop fake_name, fake_address, fake_latitude, fake_longtitude
+      shop = subject.create_shop fake_name, fake_address, fake_latitude, fake_longitude
       expect(shop.name).to eq fake_name
       expect(shop.address).to eq fake_address
       expect(shop.latitude).to eq fake_latitude
-      expect(shop.longtitude).to eq fake_longtitude
+      expect(shop.longitude).to eq fake_longitude
     end
   end
 
@@ -87,10 +87,10 @@ describe Pandora::Services::ShopService do
   describe "#get_similar_shops" do
 
     before do
-      create(:shop, {name: "new shop 1", address: 'ZhuQue Street Building7', latitude: '100.170', longtitude: '100.10', })
-      create(:shop, {name: "new shop 2", address: 'ZhuQue Street Building8', latitude: '100.130', longtitude: '100.170', })
-      create(:shop, {name: "new shop 2", address: 'ZhuQue Street Building8', latitude: '100.130', longtitude: '100.10', })
-      create(:shop, {name: "new shop 3", address: 'YanNan Street Building9', latitude: '100.100', longtitude: '100.100', })
+      create(:shop, {name: "new shop 1", address: 'ZhuQue Street Building7', latitude: '100.170', longitude: '100.10', })
+      create(:shop, {name: "new shop 2", address: 'ZhuQue Street Building8', latitude: '100.130', longitude: '100.170', })
+      create(:shop, {name: "new shop 2", address: 'ZhuQue Street Building8', latitude: '100.130', longitude: '100.10', })
+      create(:shop, {name: "new shop 3", address: 'YanNan Street Building9', latitude: '100.100', longitude: '100.100', })
     end
 
     it "should return shop's that all attibutes are similar with input" do

@@ -154,7 +154,7 @@ ActiveRecord::Schema.define(version: 20160223105128) do
     t.string   "name",       limit: 255,                   null: false
     t.string   "address",    limit: 255,                   null: false
     t.string   "latitude",   limit: 255,                   null: false
-    t.string   "longtitude", limit: 255,                   null: false
+    t.string   "longitude",  limit: 255,                   null: false
     t.string   "scale",      limit: 255
     t.string   "category",   limit: 255
     t.boolean  "deleted",                  default: false
@@ -189,7 +189,7 @@ ActiveRecord::Schema.define(version: 20160223105128) do
     t.integer  "author_id",   limit: 4,                     null: false
     t.integer  "designer_id", limit: 4,                     null: false
     t.string   "latitude",    limit: 255
-    t.string   "longtitude",  limit: 255
+    t.string   "longitude",   limit: 255
     t.integer  "image_count", limit: 4
     t.boolean  "deleted",                   default: false
     t.integer  "stars",       limit: 4,                     null: false

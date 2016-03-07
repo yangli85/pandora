@@ -81,8 +81,8 @@ module Pandora
         Pandora::Models::Shop.active.find(shop_id).update(deleted: true)
       end
 
-      def register_shop name, address, longtitude, latitude, scale, category, desc, image_paths, shop_images_folder
-        shop = Pandora::Models::Shop.create!(name: name, address: address, longtitude: longtitude, latitude: latitude, scale: scale, category: category, desc: desc)
+      def register_shop name, address, longitude, latitude, scale, category, desc, image_paths, shop_images_folder
+        shop = Pandora::Models::Shop.create!(name: name, address: address, longitude: longitude, latitude: latitude, scale: scale, category: category, desc: desc)
         image_paths.each_with_index do |path, index|
           image_path = move_image_to path[:image_path], shop_images_folder
           image = Pandora::Models::Image.create!(category: 'twitter', url: image_path)

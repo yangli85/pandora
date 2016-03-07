@@ -208,7 +208,7 @@ describe Pandora::Services::CommissionerService do
   describe "#register_shop" do
     let(:name) { "new shop" }
     let(:address) { "address" }
-    let(:longtitude) { "105.21" }
+    let(:longitude) { "105.21" }
     let(:latitude) { "34.214" }
     let(:scale) { "middle" }
     let(:category) { "underside" }
@@ -233,10 +233,10 @@ describe Pandora::Services::CommissionerService do
     end
 
     it "should create new shop with correct attributes" do
-      new_shop = subject.register_shop name, address, longtitude, latitude, scale, category, desc, image_paths, shop_images_folder
+      new_shop = subject.register_shop name, address, longitude, latitude, scale, category, desc, image_paths, shop_images_folder
       expect(new_shop.name).to eq name
       expect(new_shop.address).to eq address
-      expect(new_shop.longtitude).to eq longtitude
+      expect(new_shop.longitude).to eq longitude
       expect(new_shop.latitude).to eq latitude
       expect(new_shop.scale).to eq scale
       expect(new_shop.desc).to eq desc

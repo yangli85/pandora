@@ -5,7 +5,7 @@ class CreateTwitters < ActiveRecord::Migration
       t.integer :author_id, :null => false
       t.integer :designer_id, :null => false
       t.string :latitude
-      t.string :longtitude
+      t.string :longitude
       t.integer :image_count
       t.boolean :deleted, :default => false
       t.integer :stars, :null => false

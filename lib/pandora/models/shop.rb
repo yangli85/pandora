@@ -7,7 +7,7 @@ module Pandora
       validates :name, :presence => true
       validates :address, :presence => true
       validates :latitude, :presence => true
-      validates :longtitude, :presence => true
+      validates :longitude, :presence => true
       has_many :designers
       has_many :promotion_logs, class_name: "Pandora::Models::ShopPromotionLog", foreign_key: :shop_id, dependent: :destroy
       has_many :shop_images, dependent: :destroy
@@ -19,7 +19,7 @@ module Pandora
             name: name,
             address: address,
             latitude: latitude,
-            longtitude: longtitude
+            longitude: longitude
         }
       end
     end

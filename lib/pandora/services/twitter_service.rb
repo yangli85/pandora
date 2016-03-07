@@ -29,10 +29,10 @@ module Pandora
         end
       end
 
-      def create_twitter author_id, designer_id, content, image_paths, stars, latitude, longtitude, twitter_images_folder
+      def create_twitter author_id, designer_id, content, image_paths, stars, latitude, longitude, twitter_images_folder
         author = Pandora::Models::User.find_by_id(author_id)
         designer = Pandora::Models::Designer.find_by_id(designer_id)
-        twitter = Pandora::Models::Twitter.create!(author: author, designer: designer, content: content, latitude: latitude, longtitude: longtitude, stars: stars, image_count: image_paths.length)
+        twitter = Pandora::Models::Twitter.create!(author: author, designer: designer, content: content, latitude: latitude, longitude: longitude, stars: stars, image_count: image_paths.length)
 
         image_paths.each_with_index do |path, index|
           image_path = move_image_to path[:image_path], twitter_images_folder

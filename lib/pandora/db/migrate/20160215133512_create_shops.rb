@@ -4,7 +4,7 @@ class CreateShops < ActiveRecord::Migration
       t.string :name, :null => false
       t.string :address, :null => false
       t.string :latitude, :null => false
-      t.string :longtitude, :null => false
+      t.string :longitude, :null => false
       t.string :scale
       t.string :category
       t.boolean :deleted, :default => false
