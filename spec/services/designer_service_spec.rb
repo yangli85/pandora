@@ -191,6 +191,7 @@ describe Pandora::Services::DesignerService do
       expect(subject.search_designers(5, 1, 'li').count).to eq 1
       expect(subject.search_designers(5, 1, '138').count).to eq 2
       expect(subject.search_designers(5, 1, '13800000001').count).to eq 1
+      expect(subject.search_designers(5, 2, '13800000001').count).to eq 0
     end
 
     it "should order by totally stars" do
@@ -199,9 +200,15 @@ describe Pandora::Services::DesignerService do
   end
 
   describe '#get_designer_rank' do
+    before do
+      new_user = create(:user, {phone_number: '13800000004', name: 'tommy liu'})
+      create(:designer, {shop: shop, user: new_user, totally_stars: 2, is_vip: true, created_at: Time.parse("2016-03-12 04:30:39 UTC")})
+    end
+
     it "should return correct rank" do
-      expect(subject.get_designer_rank 1, 'totally_stars').to eq 2
-      expect(subject.get_designer_rank 2, 'totally_stars').to eq 1
+      expect(subject.get_designer_rank 1, 'totally_stars').to eq 3
+      expect(subject.get_designer_rank 2, 'totally_stars').to eq 2
+      expect(subject.get_designer_rank 4, 'totally_stars').to eq 1
     end
   end
 

@@ -1,4 +1,5 @@
 require 'pandora/models/base'
+require 'pandora/models/twitter_image'
 
 module Pandora
   module Models
