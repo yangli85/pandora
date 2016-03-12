@@ -18,7 +18,7 @@ describe Pandora::Services::DesignerService do
     it "should return only current page' designers" do
       expect(subject.get_ordered_designers(1, 2, 'totally_stars').count).to eq 1
       expect(subject.get_ordered_designers(2, 1, 'totally_stars').count).to eq 2
-      expect(subject.get_ordered_designers(5, 1, 'totally_stars').count).to eq 2
+      expect(subject.get_ordered_designers(5, 1, 'totally_stars').count).to eq 3
     end
 
     it "should order designers by totally_stars" do
@@ -186,10 +186,10 @@ describe Pandora::Services::DesignerService do
 
   describe '#search_designers' do
     it "should return correct search result" do
-      expect(subject.search_designers(5, 1, 'tommy').count).to eq 2
+      expect(subject.search_designers(5, 1, 'tommy').count).to eq 3
       expect(subject.search_designers(5, 1, 'zhang').count).to eq 1
       expect(subject.search_designers(5, 1, 'li').count).to eq 1
-      expect(subject.search_designers(5, 1, '138').count).to eq 2
+      expect(subject.search_designers(5, 1, '138').count).to eq 3
       expect(subject.search_designers(5, 1, '13800000001').count).to eq 1
       expect(subject.search_designers(5, 2, '13800000001').count).to eq 0
     end
@@ -206,9 +206,9 @@ describe Pandora::Services::DesignerService do
     end
 
     it "should return correct rank" do
-      expect(subject.get_designer_rank 1, 'totally_stars').to eq 3
-      expect(subject.get_designer_rank 2, 'totally_stars').to eq 2
-      expect(subject.get_designer_rank 4, 'totally_stars').to eq 1
+      expect(subject.get_designer_rank 1, 'totally_stars').to eq 4
+      expect(subject.get_designer_rank 2, 'totally_stars').to eq 3
+      expect(subject.get_designer_rank 4, 'totally_stars').to eq 2
     end
   end
 
