@@ -59,9 +59,11 @@ describe Pandora::Services::ShopService do
     let(:fake_address) { 'zhuque street No1 new building' }
     let(:fake_latitude) { '105.124' }
     let(:fake_longitude) { '205.124' }
+    let(:fake_province) { 'shannxi' }
+    let(:fake_city) { "xi'an"}
 
     it "should create shop correctly" do
-      shop = subject.create_shop fake_name, fake_address, fake_latitude, fake_longitude
+      shop = subject.create_shop fake_name, fake_address, fake_latitude, fake_longitude, fake_province, fake_city
       expect(shop.name).to eq fake_name
       expect(shop.address).to eq fake_address
       expect(shop.latitude).to eq fake_latitude
@@ -77,10 +79,10 @@ describe Pandora::Services::ShopService do
     end
 
     it "should return matched shop" do
-      expect(subject.search_shops('new',3,1,'created_at').count).to eq 3
-      expect(subject.search_shops('man',1,1,'created_at').count).to eq 1
-      expect(subject.search_shops('Sty',1,1,'created_at').count).to eq 1
-      expect(subject.search_shops('Styaa',1,1,'created_at').count).to eq 0
+      expect(subject.search_shops('new', 3, 1, 'created_at').count).to eq 3
+      expect(subject.search_shops('man', 1, 1, 'created_at').count).to eq 1
+      expect(subject.search_shops('Sty', 1, 1, 'created_at').count).to eq 1
+      expect(subject.search_shops('Styaa', 1, 1, 'created_at').count).to eq 0
     end
   end
 

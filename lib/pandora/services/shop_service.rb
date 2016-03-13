@@ -34,8 +34,8 @@ EOSQL
         Pandora::Models::Shop.find(shop_id)
       end
 
-      def create_shop name, address, latitude, longitude
-        Pandora::Models::Shop.active.create!(name: name, address: address, latitude: latitude, longitude: longitude)
+      def create_shop name, address, latitude, longitude, province, city
+        Pandora::Models::Shop.active.create!(name: name, address: address, latitude: latitude, longitude: longitude, province: province, city: city)
       end
 
       def search_shops query, page_size, current_page, order_by

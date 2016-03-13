@@ -61,6 +61,18 @@ module Pandora
         Pandora::Models::Designer.where(user_id: user_ids).order("created_at desc").limit(page_size).offset(page_size*(current_page-1))
       end
 
+      def get_promotion_vip_designers c_id, page_size, current_page
+        phone_numbers = Pandora::Models::PromotionLog.select(:phone_number).where(c_id: c_id).uniq
+        user_ids = Pandora::Models::User.select(:id).where(phone_number: phone_numbers)
+        Pandora::Models::Designer.vip.where(user_id: user_ids).order("created_at desc").limit(page_size).offset(page_size*(current_page-1))
+      end
+
+      def get_promotion_designers c_id, page_size, current_page
+        phone_numbers = Pandora::Models::PromotionLog.select(:phone_number).where(c_id: c_id).uniq
+        user_ids = Pandora::Models::User.select(:id).where(phone_number: phone_numbers)
+        Pandora::Models::Designer.where(user_id: user_ids).order("created_at desc").limit(page_size).offset(page_size*(current_page-1))
+      end
+
       def get_shop_promotion_logs c_id, shop_id, page_size, current_page
         Pandora::Models::ShopPromotionLog.where(c_id: c_id, shop_id: shop_id).order("created_at desc").limit(page_size).offset(page_size*(current_page-1))
       end
@@ -81,8 +93,8 @@ module Pandora
         Pandora::Models::Shop.active.find(shop_id).update(deleted: true)
       end
 
-      def register_shop name, address, longitude, latitude, scale, category, desc, image_paths, shop_images_folder
-        shop = Pandora::Models::Shop.create!(name: name, address: address, longitude: longitude, latitude: latitude, scale: scale, category: category, desc: desc)
+      def register_shop name, address, longitude, latitude, scale, category, desc, image_paths, shop_images_folder, province, city
+        shop = Pandora::Models::Shop.create!(name: name, address: address, longitude: longitude, latitude: latitude, scale: scale, category: category, desc: desc, province: province, city: city)
         image_paths.each_with_index do |path, index|
           image_path = move_image_to path[:image_path], shop_images_folder
           image = Pandora::Models::Image.create!(category: 'twitter', url: image_path)

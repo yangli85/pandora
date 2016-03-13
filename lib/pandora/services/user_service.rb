@@ -138,6 +138,10 @@ module Pandora
       def search_users query
         Pandora::Models::User.where("name like ? or phone_number like ?", "%#{query}%", "%#{query}%")
       end
+
+      def add_designer_called_log user_id, designer_id
+        Pandora::Models::DesignerCalledLog.create!(user_id: user_id, designer_id: designer_id)
+      end
     end
   end
 end

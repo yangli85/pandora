@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160223105128) do
+ActiveRecord::Schema.define(version: 20160313102128) do
 
   create_table "account_logs", force: :cascade do |t|
     t.integer  "account_id", limit: 4
@@ -62,6 +62,16 @@ ActiveRecord::Schema.define(version: 20160223105128) do
 
   add_index "commissioners", ["code_image_id"], name: "fk_rails_fa70faddc9", using: :btree
   add_index "commissioners", ["phone_number"], name: "index_commissioners_on_phone_number", using: :btree
+
+  create_table "designer_called_logs", force: :cascade do |t|
+    t.integer  "user_id",     limit: 4
+    t.integer  "designer_id", limit: 4
+    t.datetime "created_at",            null: false
+    t.datetime "updated_at",            null: false
+  end
+
+  add_index "designer_called_logs", ["designer_id"], name: "index_designer_called_logs_on_designer_id", using: :btree
+  add_index "designer_called_logs", ["user_id"], name: "index_designer_called_logs_on_user_id", using: :btree
 
   create_table "designers", force: :cascade do |t|
     t.integer  "user_id",       limit: 4,                 null: false
@@ -153,6 +163,8 @@ ActiveRecord::Schema.define(version: 20160223105128) do
   create_table "shops", force: :cascade do |t|
     t.string   "name",       limit: 255,                   null: false
     t.string   "address",    limit: 255,                   null: false
+    t.string   "province",   limit: 255,                   null: false
+    t.string   "city",       limit: 255,                   null: false
     t.string   "latitude",   limit: 255,                   null: false
     t.string   "longitude",  limit: 255,                   null: false
     t.string   "scale",      limit: 255
@@ -239,6 +251,8 @@ ActiveRecord::Schema.define(version: 20160223105128) do
   add_foreign_key "accounts", "users"
   add_foreign_key "ad_images", "images"
   add_foreign_key "commissioners", "images", column: "code_image_id"
+  add_foreign_key "designer_called_logs", "designers"
+  add_foreign_key "designer_called_logs", "users"
   add_foreign_key "designers", "shops"
   add_foreign_key "designers", "users"
   add_foreign_key "favorite_designers", "designers"

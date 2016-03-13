@@ -212,6 +212,8 @@ describe Pandora::Services::CommissionerService do
     let(:latitude) { "34.214" }
     let(:scale) { "middle" }
     let(:category) { "underside" }
+    let(:province) { "shannxi" }
+    let(:city) { "xi'an" }
     let(:desc) { "very fastion" }
     let(:shop_images_folder) { "images/shop" }
     let(:image_paths) {
@@ -233,7 +235,7 @@ describe Pandora::Services::CommissionerService do
     end
 
     it "should create new shop with correct attributes" do
-      new_shop = subject.register_shop name, address, longitude, latitude, scale, category, desc, image_paths, shop_images_folder
+      new_shop = subject.register_shop name, address, longitude, latitude, scale, category, desc, image_paths, shop_images_folder,province,city
       expect(new_shop.name).to eq name
       expect(new_shop.address).to eq address
       expect(new_shop.longitude).to eq longitude
