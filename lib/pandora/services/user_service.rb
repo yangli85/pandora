@@ -41,14 +41,11 @@ module Pandora
         user.update(avatar: avatar)
       end
 
-      def add_favorite_image user_id, image_id
+      def add_favorite_image user_id, image_id, twitter_id
         user = Pandora::Models::User.find(user_id)
         image = Pandora::Models::Image.find(image_id)
-        Pandora::Models::FavoriteImage.create!(user: user, favorited_image: image)
-      end
-
-      def del_favorite_images ids
-        Pandora::Models::FavoriteImage.where(id: ids).destroy_all
+        twitter = Pandora::Models::Twitter.find(twitter_id)
+        Pandora::Models::FavoriteImage.create!(user: user, favorited_image: image, twitter: twitter)
       end
 
       def favorited_image? user_id, image_id

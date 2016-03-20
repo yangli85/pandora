@@ -16,7 +16,7 @@ module Pandora
       end
 
       def minus_designer_likes
-        puts favorited_designer.update(likes: favorited_designer.likes-1)
+        favorited_designer.update(likes: favorited_designer.likes-1)
       end
     end
   end

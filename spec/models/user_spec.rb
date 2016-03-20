@@ -69,10 +69,14 @@ describe Pandora::Models::User do
 
   describe 'has many favorite images' do
     before do
+      designer = create(:designer, user: user)
+      twitter = create(:twitter, {author: user, designer: designer})
       image1 = create(:image)
       image2 = create(:image)
-      create(:favorite_image, {user: user, favorited_image: image1})
-      create(:favorite_image, {user: user, favorited_image: image2})
+      create(:twitter_image, {twitter: twitter, image: image1})
+      create(:twitter_image, {twitter: twitter, image: image2})
+      create(:favorite_image, {user: user, favorited_image: image1, twitter: twitter})
+      create(:favorite_image, {user: user, favorited_image: image2, twitter: twitter})
     end
 
     it "should get user's favorite images" do

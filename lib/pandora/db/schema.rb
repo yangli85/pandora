@@ -102,17 +102,20 @@ ActiveRecord::Schema.define(version: 20160313102128) do
   create_table "favorite_images", force: :cascade do |t|
     t.integer  "user_id",    limit: 4, null: false
     t.integer  "image_id",   limit: 4, null: false
+    t.integer  "twitter_id", limit: 4, null: false
     t.datetime "created_at",           null: false
     t.datetime "updated_at",           null: false
   end
 
   add_index "favorite_images", ["image_id"], name: "index_favorite_images_on_image_id", using: :btree
+  add_index "favorite_images", ["twitter_id"], name: "fk_rails_abb4192bb2", using: :btree
   add_index "favorite_images", ["user_id"], name: "index_favorite_images_on_user_id", using: :btree
 
   create_table "images", force: :cascade do |t|
     t.string   "category",          limit: 255, default: "unknow", null: false
     t.string   "url",               limit: 255,                    null: false
     t.integer  "original_image_id", limit: 4
+    t.integer  "likes",             limit: 4
     t.datetime "created_at",                                       null: false
     t.datetime "updated_at",                                       null: false
   end
@@ -258,6 +261,7 @@ ActiveRecord::Schema.define(version: 20160313102128) do
   add_foreign_key "favorite_designers", "designers"
   add_foreign_key "favorite_designers", "users"
   add_foreign_key "favorite_images", "images"
+  add_foreign_key "favorite_images", "twitters"
   add_foreign_key "favorite_images", "users"
   add_foreign_key "images", "images", column: "original_image_id"
   add_foreign_key "messages", "users"

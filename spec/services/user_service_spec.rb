@@ -81,28 +81,20 @@ describe Pandora::Services::UserService do
   describe 'favorite images' do
     let(:image) { create(:image) }
     let(:user) { create(:user) }
+    let(:designer) { create(:designer, user: user) }
+    let(:twitter) { create(:twitter, author: user, designer: designer) }
+
+    before do
+      create(:twitter_image, twitter: twitter, image: image)
+    end
 
     describe "#add_favorite_image" do
       it "should add user favorite image successfully" do
-        subject.add_favorite_image user.id, image.id
+        subject.add_favorite_image user.id, image.id, twitter.id
         expect(user.favorited_images.count).to eq 1
+        expect(twitter.likes).to eq 21
       end
     end
-
-    describe "#del_favorite_images" do
-      let(:favorite_image) { create(:favorite_image, {user: user, favorited_image: image}) }
-
-      it "should delete user favorite image if give a favorite image id" do
-        subject.del_favorite_images favorite_image.id
-        expect(user.favorited_images.count).to eq 0
-      end
-
-      it "should delete user favorite image if give a favorite images id list" do
-        subject.del_favorite_images [favorite_image.id]
-        expect(user.favorited_images.count).to eq 0
-      end
-    end
-
 
     describe "#favorited_image?" do
       it "should return false if user has not favorited the image" do
@@ -110,14 +102,15 @@ describe Pandora::Services::UserService do
       end
 
       it "should return true if user has not favorited the image" do
-        subject.add_favorite_image user.id, image.id
+        create(:favorite_image, {user: user, favorited_image: image, twitter: twitter})
         expect(subject.favorited_image? user.id, image.id).to eq true
       end
     end
 
     describe "#favorited_images" do
+
       it "should return user favorited images" do
-        subject.add_favorite_image user.id, image.id
+        create(:favorite_image, {user: user, favorited_image: image, twitter: twitter})
         expect(subject.favorited_images(user.id).count).to eq 1
       end
 
