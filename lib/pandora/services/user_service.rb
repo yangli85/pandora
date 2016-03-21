@@ -5,7 +5,9 @@ require 'pandora/models/image'
 require 'pandora/models/favorite_image'
 require 'pandora/models/favorite_designer'
 require 'pandora/models/designer'
+require 'pandora/models/designer_called_log'
 require 'pandora/models/user'
+require 'pandora/models/login_user'
 require 'pandora/common/service_helper'
 
 module Pandora
@@ -138,6 +140,19 @@ module Pandora
 
       def add_designer_called_log user_id, designer_id
         Pandora::Models::DesignerCalledLog.create!(user_id: user_id, designer_id: designer_id)
+      end
+
+      def get_access_token user_id
+        begin
+          Pandora::Models::LoginUser.find(user_id).access_token
+        rescue => e
+        end
+      end
+
+      def create_or_update_access_token user_id, access_token
+        login_user = Pandora::Models::LoginUser.find_or_create_by(user_id:user_id)
+        login_user.access_token = access_token;
+        login_user.save!
       end
     end
   end

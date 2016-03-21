@@ -16,6 +16,7 @@ module Pandora
       has_many :favorited_designers, through: :favorite_designers, dependent: :destroy
       has_one :designer, dependent: :destroy
       has_one :account, dependent: :destroy
+      has_one :login_user, dependent: :destroy
       belongs_to :avatar, class_name: "Pandora::Models::Image", foreign_key: :image_id, dependent: :destroy
 
       def attributes

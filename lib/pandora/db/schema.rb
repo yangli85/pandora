@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160313102128) do
+ActiveRecord::Schema.define(version: 20160313211111) do
 
   create_table "account_logs", force: :cascade do |t|
     t.integer  "account_id", limit: 4
@@ -121,6 +121,14 @@ ActiveRecord::Schema.define(version: 20160313102128) do
   end
 
   add_index "images", ["original_image_id"], name: "fk_rails_5e5acaf60a", using: :btree
+
+  create_table "login_users", primary_key: "user_id", force: :cascade do |t|
+    t.string   "access_token", limit: 255
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
+  end
+
+  add_index "login_users", ["user_id"], name: "index_login_users_on_user_id", using: :btree
 
   create_table "messages", force: :cascade do |t|
     t.integer  "user_id",    limit: 4,                    null: false
@@ -264,6 +272,7 @@ ActiveRecord::Schema.define(version: 20160313102128) do
   add_foreign_key "favorite_images", "twitters"
   add_foreign_key "favorite_images", "users"
   add_foreign_key "images", "images", column: "original_image_id"
+  add_foreign_key "login_users", "users"
   add_foreign_key "messages", "users"
   add_foreign_key "promotion_logs", "commissioners", column: "c_id"
   add_foreign_key "shop_images", "images"

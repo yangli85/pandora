@@ -350,5 +350,36 @@ describe Pandora::Services::UserService do
         expect(subject.search_users('138').count).to eq 3
       end
     end
+
+    describe "#get_access_token" do
+      let(:user) { create(:user, {phone_number: '13800000001'}) }
+
+      before do
+        create(:login_user, {user: user, access_token: "123456"})
+      end
+
+      it "should return user access_token" do
+        expect(subject.get_access_token user.id).to eq  "123456"
+      end
+
+      it "should return nil if no access_token" do
+        expect(subject.get_access_token 10).to eq  nil
+      end
+    end
+
+    describe "#create_or_update_access_token" do
+      let(:user) { create(:user, {phone_number: '13800000001'}) }
+
+      it "should update access_token" do
+        create(:login_user, {user: user, access_token: "123456"})
+        subject.create_or_update_access_token user.id, "654321"
+        expect(Pandora::Models::LoginUser.find(user.id).access_token).to eq "654321"
+      end
+
+      it "should create access_token" do
+       subject.create_or_update_access_token user.id, "654321"
+       expect(user.login_user.access_token).to eq "654321"
+      end
+    end
   end
 end
