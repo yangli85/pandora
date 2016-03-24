@@ -12,7 +12,8 @@ module Pandora
         {
             id: id,
             content: content,
-            created_at: relative_time(created_at)
+            created_at: relative_time(created_at),
+            is_new: is_new
         }
       end
     end

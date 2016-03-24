@@ -20,7 +20,7 @@ module Pandora
 
       def minus_image_likes
         twitter_image = twitter.twitter_images.where(image_id: image_id).first
-        twitter_image.update(likes: twitter_image.likes-1)
+        twitter_image.update(likes: twitter_image.likes-1) unless twitter_image.nil?
       end
     end
   end

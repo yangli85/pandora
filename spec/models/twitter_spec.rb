@@ -2,6 +2,7 @@ require 'pandora/models/twitter'
 require 'pandora/models/twitter_image'
 require 'pandora/models/user'
 require 'pandora/models/image'
+require 'pandora/models/favorite_image'
 require 'pandora/models/designer'
 require 'date'
 
@@ -71,6 +72,7 @@ describe Pandora::Models::Twitter do
     before do
       create(:twitter_image, {twitter: twitter, image: image1})
       create(:twitter_image, {twitter: twitter, image: image2})
+      create(:favorite_image, {user: author, twitter: twitter, favorited_image: image2})
     end
 
     it "should delete twitter_image if twitter destroy" do
@@ -81,6 +83,11 @@ describe Pandora::Models::Twitter do
     it "should delete twitter's images if twitter destroy" do
       twitter.destroy
       expect(Pandora::Models::Image.count).to eq 1
+    end
+
+    it "should delete twitter's related favorite image if twitter destroy" do
+      twitter.destroy
+      expect(Pandora::Models::FavoriteImage.count).to eq 0
     end
   end
 
