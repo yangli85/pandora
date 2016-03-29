@@ -26,10 +26,15 @@ module Pandora
         commissioner.update(be_scanned_times: commissioner.be_scanned_times+1)
       end
 
-      def register phone_number, name, password, code_image_path, code_image_folder
+      def register phone_number, name, password
+        Pandora::Models::Commissioner.create!(phone_number: phone_number, name: name, password: password)
+      end
+
+      def add_code_image c_id, code_image_path, code_image_folder
         image_path = move_image_to code_image_path, code_image_folder
         code_image = Pandora::Models::Image.create!(category: 'QR_code', url: image_path)
-        Pandora::Models::Commissioner.create!(phone_number: phone_number, name: name, password: password, code_image: code_image)
+        commissioner = Pandora::Models::Commissioner.find(c_id)
+        commissioner.update!(code_image_id: code_image.id)
       end
 
       def get_promotion_logs c_id, page_size, current_page

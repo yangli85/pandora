@@ -23,35 +23,49 @@ describe Pandora::Services::CommissionerService do
   describe "#register" do
     let(:fake_name) { "new commissioner" }
     let(:fake_password) { "111111" }
-    let(:fake_image) { create(:image) }
-    let(:fake_image_folder) { 'temp_images/code' }
+    # let(:fake_image) { create(:image) }
+    # let(:fake_image_folder) { 'temp_images/code' }
 
     before do
       commissioner.destroy
-      allow(FileUtils).to receive(:mv)
     end
 
     it "should create commissioner" do
-      new_commissioner = subject.register fake_phone_number, fake_name, fake_password, fake_image.url, fake_image_folder
+      new_commissioner = subject.register fake_phone_number, fake_name, fake_password
       expect(new_commissioner).to eq Pandora::Models::Commissioner.find_by_phone_number(fake_phone_number)
     end
 
     it "should create commissioner with correct attibutes" do
-      new_commissioner = subject.register fake_phone_number, fake_name, fake_password, fake_image.url, fake_image_folder
+      new_commissioner = subject.register fake_phone_number, fake_name, fake_password
       expect(new_commissioner.name).to eq fake_name
       expect(new_commissioner.phone_number).to eq fake_phone_number
       expect(new_commissioner.password).to eq fake_password
-      expect(new_commissioner.code_image.url).to eq 'temp_images/code/1.jpg'
     end
 
     context "raise error" do
       it "should raise error if phone_number is nil" do
-        expect { subject.register(nil, fake_name, fake_password, fake_image.url, fake_image_folder) }.to raise_error ActiveRecord::RecordInvalid
+        expect { subject.register(nil, fake_name, fake_password) }.to raise_error ActiveRecord::RecordInvalid
       end
 
       it "should raise error if password longer than 10" do
-        expect { subject.register(fake_phone_number, fake_name, 'longpassword', fake_image.url, fake_image_folder) }.to raise_error ActiveRecord::RecordInvalid
+        expect { subject.register(fake_phone_number, fake_name, 'longpassword') }.to raise_error ActiveRecord::RecordInvalid
       end
+    end
+  end
+
+  describe "#add_code_image" do
+    let(:fake_code_image_path) { "temp_images/1.png" }
+    let(:fake_commissioner_id) { commissioner.id }
+    let(:fake_code_image_folder) { "images/code" }
+
+    before do
+      allow(FileUtils).to receive(:mv)
+    end
+
+    it "should update commissioner code image" do
+      subject.add_code_image fake_commissioner_id, fake_code_image_path, fake_code_image_folder
+      commissioner = Pandora::Models::Commissioner.find(fake_commissioner_id)
+      expect(commissioner.code_image.url).to eq "images/code/1.png"
     end
   end
 
@@ -131,9 +145,9 @@ describe Pandora::Services::CommissionerService do
       end
 
       it "should return all commissioner's user of current page" do
-        expect(subject.get_promotion_users(commissioner.id,2,1).count).to eq 2
-        expect(subject.get_promotion_users(commissioner.id,1,2).count).to eq 1
-        expect(subject.get_promotion_users(commissioner.id,5,2).count).to eq 0
+        expect(subject.get_promotion_users(commissioner.id, 2, 1).count).to eq 2
+        expect(subject.get_promotion_users(commissioner.id, 1, 2).count).to eq 1
+        expect(subject.get_promotion_users(commissioner.id, 5, 2).count).to eq 0
       end
     end
 
@@ -145,9 +159,9 @@ describe Pandora::Services::CommissionerService do
       end
 
       it "should return all commissioner's designers" do
-        expect(subject.get_promotion_designers(commissioner.id,2,1).count).to eq 1
-        expect(subject.get_promotion_designers(commissioner.id,1,1).count).to eq 1
-        expect(subject.get_promotion_designers(commissioner.id,1,2).count).to eq 0
+        expect(subject.get_promotion_designers(commissioner.id, 2, 1).count).to eq 1
+        expect(subject.get_promotion_designers(commissioner.id, 1, 1).count).to eq 1
+        expect(subject.get_promotion_designers(commissioner.id, 1, 2).count).to eq 0
       end
     end
   end
@@ -235,7 +249,7 @@ describe Pandora::Services::CommissionerService do
     end
 
     it "should create new shop with correct attributes" do
-      new_shop = subject.register_shop name, address, longitude, latitude, scale, category, desc, image_paths, shop_images_folder,province,city
+      new_shop = subject.register_shop name, address, longitude, latitude, scale, category, desc, image_paths, shop_images_folder, province, city
       expect(new_shop.name).to eq name
       expect(new_shop.address).to eq address
       expect(new_shop.longitude).to eq longitude
