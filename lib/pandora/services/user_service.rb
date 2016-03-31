@@ -156,8 +156,8 @@ module Pandora
         login_user.save!
       end
 
-      def create_payment_log user_id, out_trade_no
-        Pandora::Models::PaymentLog.create!(user_id: user_id, out_trade_no: out_trade_no)
+      def create_payment_log user_id, out_trade_no, plat_form
+        Pandora::Models::PaymentLog.create!(user_id: user_id, out_trade_no: out_trade_no, plat_form: plat_form)
       end
 
       def update_payment_log payment_log, column, value

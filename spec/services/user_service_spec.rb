@@ -388,8 +388,9 @@ describe Pandora::Services::UserService do
 
       describe "#create_payment_log" do
         it "should create_payment_log with correct attributes" do
-          subject.create_payment_log user.id, fake_out_trade_no
+          subject.create_payment_log user.id, fake_out_trade_no,"WX"
           expect(Pandora::Models::PaymentLog.find(fake_out_trade_no).user_id).to eq user.id
+          expect(Pandora::Models::PaymentLog.find(fake_out_trade_no).plat_form).to eq "WX"
         end
       end
 
