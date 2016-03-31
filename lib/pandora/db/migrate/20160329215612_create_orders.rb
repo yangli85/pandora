@@ -4,6 +4,7 @@ class CreateOrders < ActiveRecord::Migration
       t.string :product, :null => false
       t.integer :count, :null => false
       t.integer :user_id, :null => false
+      t.string :status, :default => :CREATED
       t.timestamps :null => false
     end
     add_foreign_key "orders", "users", :column => "user_id"
