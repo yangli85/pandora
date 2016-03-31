@@ -26,6 +26,7 @@ require 'factories/favorite_designer'
 require 'factories/commissioner'
 require 'factories/promotion_log'
 require 'factories/payment_log'
+require 'factories/order'
 require 'factories/shop_promotion_log'
 
 

@@ -385,18 +385,19 @@ describe Pandora::Services::UserService do
     describe "payment_log" do
       let(:user) { create(:user, phone_number: fake_phone_number) }
       let(:fake_out_trade_no) { "wx1125152151" }
+      let(:order) { create(:order, user_id: user.id) }
 
       describe "#create_payment_log" do
         it "should create_payment_log with correct attributes" do
-          subject.create_payment_log user.id, fake_out_trade_no,"WX"
-          expect(Pandora::Models::PaymentLog.find(fake_out_trade_no).user_id).to eq user.id
+          subject.create_payment_log order.id, fake_out_trade_no, "WX"
+          expect(Pandora::Models::PaymentLog.find(fake_out_trade_no).order_id).to eq order.id
           expect(Pandora::Models::PaymentLog.find(fake_out_trade_no).plat_form).to eq "WX"
         end
       end
 
       describe "#update_payment_log" do
         it "should update_payment_log with correct attributes" do
-          payment_log = create(:payment_log)
+          payment_log = create(:payment_log, order_id: order.id)
           subject.update_payment_log payment_log, "total_fee", 100
           expect(Pandora::Models::PaymentLog.find(payment_log.id).total_fee).to eq 100
         end
@@ -404,13 +405,32 @@ describe Pandora::Services::UserService do
 
       describe "#get_payment_log" do
         it "should return payment_log if log exist" do
-          payment_log = create(:payment_log)
+          payment_log = create(:payment_log, order_id: order.id)
           expect(subject.get_payment_log payment_log.id).to eq payment_log
         end
 
         it "should return nil if log not exist" do
           expect(subject.get_payment_log "not exist log id").to eq nil
         end
+      end
+    end
+
+    describe "#create_order" do
+      let(:user) { create(:user, phone_number: fake_phone_number) }
+      let(:fake_product) { "VIP" }
+      let(:fake_wrong_product) { "WRONG" }
+      let(:fake_count) { 1 }
+      let(:user) { create(:user, phone_number: fake_phone_number) }
+
+      it "should create order with correct attributes" do
+        order = subject.create_order user.id, fake_product, fake_count
+        expect(order.user_id).to eq user.id
+        expect(order.product).to eq fake_product
+        expect(order.count).to eq fake_count
+      end
+
+      it "should raise error if product is wrong" do
+        expect{subject.create_order user.id,fake_wrong_product,fake_count}.to raise_error ActiveRecord::RecordInvalid
       end
     end
   end

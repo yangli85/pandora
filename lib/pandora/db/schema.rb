@@ -140,8 +140,17 @@ ActiveRecord::Schema.define(version: 20160330140611) do
 
   add_index "messages", ["user_id"], name: "index_messages_on_user_id", using: :btree
 
+  create_table "orders", force: :cascade do |t|
+    t.string   "product",    limit: 255, null: false
+    t.integer  "count",      limit: 4,   null: false
+    t.integer  "user_id",    limit: 4,   null: false
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+  end
+
+  add_index "orders", ["user_id"], name: "index_orders_on_user_id", using: :btree
+
   create_table "payment_logs", primary_key: "out_trade_no", force: :cascade do |t|
-    t.integer  "user_id",      limit: 4,                       null: false
     t.string   "trade_no",     limit: 255
     t.string   "subject",      limit: 255
     t.string   "trade_status", limit: 255, default: "CREATED", null: false
@@ -151,9 +160,12 @@ ActiveRecord::Schema.define(version: 20160330140611) do
     t.string   "buyer_email",  limit: 255
     t.integer  "total_fee",    limit: 4
     t.string   "plat_form",    limit: 255
+    t.integer  "order_id",     limit: 4,                       null: false
     t.datetime "created_at",                                   null: false
     t.datetime "updated_at",                                   null: false
   end
+
+  add_index "payment_logs", ["order_id"], name: "fk_rails_6dd88a4342", using: :btree
 
   create_table "promotion_logs", force: :cascade do |t|
     t.string   "phone_number", limit: 255
@@ -289,6 +301,8 @@ ActiveRecord::Schema.define(version: 20160330140611) do
   add_foreign_key "images", "images", column: "original_image_id"
   add_foreign_key "login_users", "users"
   add_foreign_key "messages", "users"
+  add_foreign_key "orders", "users"
+  add_foreign_key "payment_logs", "orders"
   add_foreign_key "promotion_logs", "commissioners", column: "c_id"
   add_foreign_key "shop_images", "images"
   add_foreign_key "shop_images", "shops"

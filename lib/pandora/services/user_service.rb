@@ -9,6 +9,7 @@ require 'pandora/models/designer_called_log'
 require 'pandora/models/user'
 require 'pandora/models/login_user'
 require 'pandora/models/payment_log'
+require 'pandora/models/order'
 require 'pandora/common/service_helper'
 
 module Pandora
@@ -156,8 +157,12 @@ module Pandora
         login_user.save!
       end
 
-      def create_payment_log user_id, out_trade_no, plat_form
-        Pandora::Models::PaymentLog.create!(user_id: user_id, out_trade_no: out_trade_no, plat_form: plat_form)
+      def create_order user_id, product, count
+        Pandora::Models::Order.create!(user_id: user_id, product: product, count: count)
+      end
+
+      def create_payment_log order_id, out_trade_no, plat_form
+        Pandora::Models::PaymentLog.create!(order_id: order_id, out_trade_no: out_trade_no, plat_form: plat_form)
       end
 
       def update_payment_log payment_log, column, value
