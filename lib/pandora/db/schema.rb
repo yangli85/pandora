@@ -141,11 +141,13 @@ ActiveRecord::Schema.define(version: 20160330140611) do
   add_index "messages", ["user_id"], name: "index_messages_on_user_id", using: :btree
 
   create_table "orders", force: :cascade do |t|
-    t.string   "product",    limit: 255, null: false
-    t.integer  "count",      limit: 4,   null: false
-    t.integer  "user_id",    limit: 4,   null: false
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
+    t.string   "product",    limit: 255,                       null: false
+    t.integer  "count",      limit: 4,                         null: false
+    t.integer  "user_id",    limit: 4,                         null: false
+    t.text     "result",     limit: 65535
+    t.string   "status",     limit: 255,   default: "CREATED"
+    t.datetime "created_at",                                   null: false
+    t.datetime "updated_at",                                   null: false
   end
 
   add_index "orders", ["user_id"], name: "index_orders_on_user_id", using: :btree

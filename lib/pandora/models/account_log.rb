@@ -5,8 +5,8 @@ module Pandora
   module Models
     class AccountLog < Pandora::Models::Base
       include Pandora::Common::TimeHelper
-      enum events: [:donate, :recharge, :consume, :unknow]
-      enum channels: [:alipay, :wechat, :beautyshow]
+      enum events: [:DONATE, :RECHARGE, :CONSUME, :UNKNOW]
+      enum channels: [:ALI, :WECHAT, :BEAUTYSHOW]
       validates :event, inclusion: {in: events.keys}
       validates :channel, inclusion: {in: channels.keys}
       belongs_to :account, class_name: "Pandora::Models::Account"

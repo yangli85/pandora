@@ -16,7 +16,7 @@ describe Pandora::Models::Account do
   describe 'has_many' do
     before do
       5.times do
-        create(:account_log, {account: account, from_user: user.id, to_user: user.id, event: 'recharge'})
+        create(:account_log, {account: account, from_user: user.id, to_user: user.id, event: 'RECHARGE'})
       end
     end
 

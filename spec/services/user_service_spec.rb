@@ -221,8 +221,8 @@ describe Pandora::Services::UserService do
 
   describe "#update_account_balance" do
     let(:fake_desc) { "购买了5颗星星" }
-    let(:fake_event) { "recharge" }
-    let(:fake_channel) { "beautyshow" }
+    let(:fake_event) { "RECHARGE" }
+    let(:fake_channel) { "BEAUTYSHOW" }
 
     it "should update account balance + 10" do
       user = create(:user)
@@ -261,7 +261,7 @@ describe Pandora::Services::UserService do
 
     before do
       5.times do
-        create(:account_log, {account: account, from_user: user.id, to_user: user.id, event: 'recharge'})
+        create(:account_log, {account: account, from_user: user.id, to_user: user.id, event: 'RECHARGE'})
       end
     end
 
@@ -280,9 +280,9 @@ describe Pandora::Services::UserService do
     let(:account) { create(:account, user: user) }
 
     it "should create account log successfully" do
-      subject.add_account_log(account.id, 'recharge', 'alipay', '10', user.id, user.id, "buy 10 stars")
+      subject.add_account_log(account.id, 'RECHARGE', 'ALI', '10', user.id, user.id, "buy 10 stars")
       account_log = account.account_logs.first
-      expect(account_log.channel).to eq "alipay"
+      expect(account_log.channel).to eq "ALI"
       expect(account_log.balance).to eq 10
       expect(account_log.from_user).to eq user.id
       expect(account_log.to_user).to eq user.id

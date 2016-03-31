@@ -172,6 +172,10 @@ module Pandora
       def get_payment_log out_trade_no
         Pandora::Models::PaymentLog.find_by_out_trade_no(out_trade_no)
       end
+
+      def update_order order, column, value
+        order.update!(column.to_sym => value)
+      end
     end
   end
 end
