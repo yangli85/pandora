@@ -359,11 +359,11 @@ describe Pandora::Services::UserService do
       end
 
       it "should return user access_token" do
-        expect(subject.get_access_token user.id).to eq  "123456"
+        expect(subject.get_access_token user.id).to eq "123456"
       end
 
       it "should return nil if no access_token" do
-        expect(subject.get_access_token 10).to eq  nil
+        expect(subject.get_access_token 10).to eq nil
       end
     end
 
@@ -377,8 +377,39 @@ describe Pandora::Services::UserService do
       end
 
       it "should create access_token" do
-       subject.create_or_update_access_token user.id, "654321"
-       expect(user.login_user.access_token).to eq "654321"
+        subject.create_or_update_access_token user.id, "654321"
+        expect(user.login_user.access_token).to eq "654321"
+      end
+    end
+
+    describe "payment_log" do
+      let(:user) { create(:user, phone_number: fake_phone_number) }
+      let(:fake_out_trade_no) { "wx1125152151" }
+
+      describe "#create_payment_log" do
+        it "should create_payment_log with correct attributes" do
+          subject.create_payment_log user.id, fake_out_trade_no
+          expect(Pandora::Models::PaymentLog.find(fake_out_trade_no).user_id).to eq user.id
+        end
+      end
+
+      describe "#update_payment_log" do
+        it "should update_payment_log with correct attributes" do
+          payment_log = create(:payment_log)
+          subject.update_payment_log payment_log, "total_fee", 100
+          expect(Pandora::Models::PaymentLog.find(payment_log.id).total_fee).to eq 100
+        end
+      end
+
+      describe "#get_payment_log" do
+        it "should return payment_log if log exist" do
+          payment_log = create(:payment_log)
+          expect(subject.get_payment_log payment_log.id).to eq payment_log
+        end
+
+        it "should return nil if log not exist" do
+          expect(subject.get_payment_log "not exist log id").to eq nil
+        end
       end
     end
   end

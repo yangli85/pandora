@@ -1,4 +1,5 @@
 require 'fileutils'
+
 module Pandora
   module Common
     module ServiceHelper

@@ -8,6 +8,7 @@ require 'pandora/models/designer'
 require 'pandora/models/designer_called_log'
 require 'pandora/models/user'
 require 'pandora/models/login_user'
+require 'pandora/models/payment_log'
 require 'pandora/common/service_helper'
 
 module Pandora
@@ -150,9 +151,21 @@ module Pandora
       end
 
       def create_or_update_access_token user_id, access_token
-        login_user = Pandora::Models::LoginUser.find_or_create_by(user_id:user_id)
+        login_user = Pandora::Models::LoginUser.find_or_create_by(user_id: user_id)
         login_user.access_token = access_token;
         login_user.save!
+      end
+
+      def create_payment_log user_id, out_trade_no
+        Pandora::Models::PaymentLog.create!(user_id: user_id, out_trade_no: out_trade_no)
+      end
+
+      def update_payment_log payment_log, column, value
+        payment_log.update!(column.to_sym => value)
+      end
+
+      def get_payment_log out_trade_no
+        Pandora::Models::PaymentLog.find_by_out_trade_no(out_trade_no)
       end
     end
   end

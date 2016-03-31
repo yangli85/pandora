@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160313211111) do
+ActiveRecord::Schema.define(version: 20160330140611) do
 
   create_table "account_logs", force: :cascade do |t|
     t.integer  "account_id", limit: 4
@@ -139,6 +139,21 @@ ActiveRecord::Schema.define(version: 20160313211111) do
   end
 
   add_index "messages", ["user_id"], name: "index_messages_on_user_id", using: :btree
+
+  create_table "payment_logs", primary_key: "out_trade_no", force: :cascade do |t|
+    t.integer  "user_id",      limit: 4,                       null: false
+    t.string   "trade_no",     limit: 255
+    t.string   "subject",      limit: 255
+    t.string   "trade_status", limit: 255, default: "CREATED", null: false
+    t.string   "seller_id",    limit: 255
+    t.string   "seller_email", limit: 255
+    t.string   "buyer_id",     limit: 255
+    t.string   "buyer_email",  limit: 255
+    t.integer  "total_fee",    limit: 4
+    t.string   "plat_form",    limit: 255
+    t.datetime "created_at",                                   null: false
+    t.datetime "updated_at",                                   null: false
+  end
 
   create_table "promotion_logs", force: :cascade do |t|
     t.string   "phone_number", limit: 255
