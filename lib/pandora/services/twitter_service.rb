@@ -41,6 +41,7 @@ module Pandora
           s_image = Pandora::Models::Image.create!(category: 'twitter', url: s_image_path, original_image: image)
           Pandora::Models::TwitterImage.create!(twitter_id: twitter.id, image: image, rank: index+1)
         end
+        twitter
       end
 
       def update_twitter_image_likes twitter_id, image_id
