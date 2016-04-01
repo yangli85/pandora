@@ -9,7 +9,7 @@ class CreatePaymentLogs < ActiveRecord::Migration
       t.string :seller_email
       t.string :buyer_id
       t.string :buyer_email
-      t.integer :total_fee
+      t.float :total_fee
       t.string :plat_form
       t.integer :order_id, :null => false
       t.timestamps :null => false

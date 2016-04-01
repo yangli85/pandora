@@ -160,7 +160,7 @@ ActiveRecord::Schema.define(version: 20160330140611) do
     t.string   "seller_email", limit: 255
     t.string   "buyer_id",     limit: 255
     t.string   "buyer_email",  limit: 255
-    t.integer  "total_fee",    limit: 4
+    t.float    "total_fee",    limit: 24
     t.string   "plat_form",    limit: 255
     t.integer  "order_id",     limit: 4,                       null: false
     t.datetime "created_at",                                   null: false
