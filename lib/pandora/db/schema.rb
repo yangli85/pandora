@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160427102550) do
+ActiveRecord::Schema.define(version: 20160428141223) do
 
   create_table "account_logs", force: :cascade do |t|
     t.integer  "account_id", limit: 4
@@ -161,7 +161,6 @@ ActiveRecord::Schema.define(version: 20160427102550) do
     t.string   "seller_email", limit: 255
     t.string   "buyer_id",     limit: 255
     t.string   "buyer_email",  limit: 255
-    t.float    "total_fee",    limit: 24
     t.string   "plat_form",    limit: 255
     t.integer  "order_id",     limit: 4,                       null: false
     t.datetime "created_at",                                   null: false

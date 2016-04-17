@@ -398,8 +398,8 @@ describe Pandora::Services::UserService do
       describe "#update_payment_log" do
         it "should update_payment_log with correct attributes" do
           payment_log = create(:payment_log, order_id: order.id)
-          subject.update_payment_log payment_log, "total_fee", 100
-          expect(Pandora::Models::PaymentLog.find(payment_log.id).total_fee).to eq 100
+          subject.update_payment_log payment_log, "seller_id", "1001"
+          expect(Pandora::Models::PaymentLog.find(payment_log.id).seller_id).to eq "1001"
         end
       end
 
