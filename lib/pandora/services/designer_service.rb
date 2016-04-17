@@ -90,6 +90,14 @@ module Pandora
         designer.update(column.to_sym => value)
       end
 
+      def get_new_designer
+        Pandora::Models::Designer.order("created_at desc").first
+      end
+
+      def get_top1_designer order_by
+        Pandora::Models::Designer.order("#{order_by} desc").order("created_at desc").first
+      end
+
     end
   end
 end

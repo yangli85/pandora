@@ -275,4 +275,23 @@ describe Pandora::Services::DesignerService do
       expect(Pandora::Models::Designer.find(designer.id).totally_stars).to eq 10
     end
   end
+
+  describe "#get_new_designer" do
+    let(:user) { create(:user) }
+
+    it "should return new register designer" do
+      designer = create(:designer, {shop: shop, user: user})
+      expect(subject.get_new_designer).to eq designer
+    end
+  end
+
+  describe "#get_top1_designer" do
+    let(:user) { create(:user) }
+
+    it "should return new register designer" do
+      designer = subject.get_top1_designer "totally_stars"
+      new_designer = create(:designer, {shop: shop, user: user, totally_stars: designer.totally_stars+1})
+      expect(subject.get_top1_designer "totally_stars").to eq new_designer
+    end
+  end
 end

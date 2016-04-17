@@ -134,4 +134,31 @@ describe Pandora::Services::TwitterService do
       expect(Pandora::Models::Twitter.find(twitter1.id).likes - old_likes).to eq 1
     end
   end
+
+  describe "#get_latest_twitter" do
+    let(:fake_author_id) { author.id }
+    let(:fake_designer_id) { designer.id }
+    let(:fake_content) { 'new twitter' }
+    let(:fake_stars) { 3 }
+    let(:fake_twitter_images_folder) { "twitter_images" }
+    let(:fake_image_paths) { [
+        {
+            image_path: 'images/1.jpg',
+            s_image_path: 'images/s_1.jpg'
+        },
+        {
+            image_path: 'images/2.jpg',
+            s_image_path: 'images/s_2.jpg'
+        }
+    ] }
+    before do
+      Pandora::Models::Twitter.update_all(created_at: "2015-10-12 12:12:12")
+      allow(FileUtils).to receive(:mv)
+    end
+
+    it "should latest publish twitter" do
+      twitter = subject.create_twitter(fake_author_id, fake_designer_id, fake_content, fake_image_paths, fake_stars, nil, nil, fake_twitter_images_folder)
+      expect(subject.get_latest_twitter).to eq twitter
+    end
+  end
 end

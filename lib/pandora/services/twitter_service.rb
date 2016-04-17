@@ -48,6 +48,10 @@ module Pandora
         twitter_image = Pandora::Models::TwitterImage.find_by_twitter_id_and_image_id(twitter_id, image_id)
         twitter_image.update(likes: twitter_image.likes+1) unless twitter_image.nil?
       end
+
+      def get_latest_twitter
+        Pandora::Models::Twitter.active.order("created_at desc").first
+      end
     end
   end
 end
