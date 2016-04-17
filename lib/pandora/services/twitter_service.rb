@@ -19,12 +19,12 @@ module Pandora
       end
 
       def get_ordered_twitters page_size, current_page, order_by
-        Pandora::Models::Twitter.order("#{order_by} desc").limit(page_size).offset((current_page-1)*page_size)
+        Pandora::Models::Twitter.active.order("#{order_by} desc").limit(page_size).offset((current_page-1)*page_size)
       end
 
       def search_twitter_by_id id
         begin
-          Pandora::Models::Twitter.where(id: id).first
+          Pandora::Models::Twitter.active.where(id: id).first
         rescue => e
         end
       end
