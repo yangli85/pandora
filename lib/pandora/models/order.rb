@@ -12,6 +12,7 @@ module Pandora
             id: product,
             count: count,
             status: status,
+            total_fee: total_fee,
             result: result
         }
       end

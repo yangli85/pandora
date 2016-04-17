@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160330140611) do
+ActiveRecord::Schema.define(version: 20160427102550) do
 
   create_table "account_logs", force: :cascade do |t|
     t.integer  "account_id", limit: 4
@@ -148,6 +148,7 @@ ActiveRecord::Schema.define(version: 20160330140611) do
     t.string   "status",     limit: 255,   default: "CREATED"
     t.datetime "created_at",                                   null: false
     t.datetime "updated_at",                                   null: false
+    t.float    "total_fee",  limit: 24,    default: 0.0,       null: false
   end
 
   add_index "orders", ["user_id"], name: "index_orders_on_user_id", using: :btree

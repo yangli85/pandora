@@ -157,8 +157,8 @@ module Pandora
         login_user.save!
       end
 
-      def create_order user_id, product, count
-        Pandora::Models::Order.create!(user_id: user_id, product: product, count: count)
+      def create_order user_id, product, count, total_fee
+        Pandora::Models::Order.create!(user_id: user_id, product: product, count: count, total_fee: total_fee)
       end
 
       def create_payment_log order_id, out_trade_no, plat_form

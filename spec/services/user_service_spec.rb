@@ -420,17 +420,19 @@ describe Pandora::Services::UserService do
       let(:fake_product) { "VIP" }
       let(:fake_wrong_product) { "WRONG" }
       let(:fake_count) { 1 }
+      let(:fake_total_fee) { 100 }
       let(:user) { create(:user, phone_number: fake_phone_number) }
 
       it "should create order with correct attributes" do
-        order = subject.create_order user.id, fake_product, fake_count
+        order = subject.create_order user.id, fake_product, fake_count, fake_total_fee
         expect(order.user_id).to eq user.id
         expect(order.product).to eq fake_product
         expect(order.count).to eq fake_count
+        expect(order.total_fee).to eq fake_total_fee
       end
 
       it "should raise error if product is wrong" do
-        expect{subject.create_order user.id,fake_wrong_product,fake_count}.to raise_error ActiveRecord::RecordInvalid
+        expect { subject.create_order user.id, fake_wrong_product, fake_count, fake_total_fee }.to raise_error ActiveRecord::RecordInvalid
       end
     end
   end
