@@ -9,7 +9,8 @@ module Pandora
 
       def attributes
         {
-            id: product,
+            id: id,
+            product: product,
             count: count,
             status: status,
             total_fee: total_fee,
