@@ -24,7 +24,7 @@ describe Pandora::Services::UserService do
     it "should create a user for given phone_number" do
       new_user = subject.create_user fake_phone_number
       expect(new_user.phone_number).to eq fake_phone_number
-      expect(new_user.name).to eq fake_phone_number
+      expect(new_user.name).to eq subject.anonymous_phone fake_phone_number
       expect(new_user.gender).to eq 'unknow'
       expect(new_user.vitality).to eq 0
     end

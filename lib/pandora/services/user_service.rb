@@ -26,8 +26,8 @@ module Pandora
       end
 
       def create_user phone_number
-        name = anonymous_phone phone_number
-        user = Pandora::Models::User.create!(name: phone_number, phone_number: phone_number)
+        name = anonymous_phone phone_number.clone
+        user = Pandora::Models::User.create!(name: name, phone_number: phone_number)
         Pandora::Models::Account.create!(user: user)
         user
       end
