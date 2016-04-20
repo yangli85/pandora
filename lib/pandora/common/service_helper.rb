@@ -12,6 +12,11 @@ module Pandora
       def base_name image_path
         File.basename image_path
       end
+
+      def anonymous_phone phone
+        phone[3..6]="****"
+        phone
+      end
     end
   end
 end
