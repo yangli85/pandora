@@ -91,11 +91,11 @@ module Pandora
       end
 
       def get_new_designer
-        Pandora::Models::Designer.order("created_at desc").first
+        Pandora::Models::Designer.vip.order("created_at desc").first
       end
 
       def get_top1_designer order_by
-        Pandora::Models::Designer.order("#{order_by} desc").order("created_at desc").first
+        Pandora::Models::Designer.vip.order("#{order_by} desc").order("created_at desc").first
       end
 
     end
