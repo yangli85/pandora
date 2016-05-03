@@ -2,6 +2,7 @@ require 'rake'
 require 'active_support'
 require 'active_support/core_ext'
 require 'active_record'
+require 'pandora/models/designer'
 require 'yaml'
 
 module Pandora
@@ -42,6 +43,24 @@ module Pandora
           task :seed, [:seeds_file_path] => :environment do |t, args|
             args.with_defaults(seeds_file_path: "#{path}/db/seeds.rb")
             load args[:seeds_file_path]
+          end
+
+          desc "check change designer vip expired time every day"
+          task :check_vip_expired => :environment do
+            ENV['RAILS_ENV'] = ENV["RACK_ENV"] || "development"
+            Pandora::Models::Designer.lock.where("expired_at < ? ", Date.today).update_all("is_vip = false")
+          end
+
+          desc "update designer weekly stars every week"
+          task :update_weekly_stars => :environment do
+            ENV['RAILS_ENV'] = ENV["RACK_ENV"] || "development"
+            Pandora::Models::Designer.lock.update_all("weekly_stars = 0")
+          end
+
+          desc "update designer monthly stars every month"
+          task :update_monthly_stars => :environment do
+            ENV['RAILS_ENV'] = ENV["RACK_ENV"] || "development"
+            Pandora::Models::Designer.lock.update_all("monthly_stars = 0")
           end
 
           task :environment do
