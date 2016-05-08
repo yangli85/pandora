@@ -1,6 +1,6 @@
 SET GLOBAL event_scheduler = ON;
 
-DELIMITER $$
+DELIMITER$$
 CREATE PROCEDURE reset_designer_monthly_stars()
 BEGIN
   update designers SET monthly_stars=0;

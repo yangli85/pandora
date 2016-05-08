@@ -31,14 +31,14 @@ describe Pandora::Models::Designer do
   describe "has many" do
     context 'twitters' do
       before do
-        create(:twitter, {author: user, designer: designer})
+        create(:twitter, {author: user, designer: designer, deleted: true})
         create(:twitter, {author: user, designer: designer})
         create(:twitter, {author: user, designer: designer})
         create(:twitter, {author: user, designer: designer})
       end
 
       it "should return all twitters for designer" do
-        expect(designer.twitters.count).to eq 4
+        expect(designer.twitters.count).to eq 3
       end
     end
 
