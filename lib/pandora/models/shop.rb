@@ -11,7 +11,7 @@ module Pandora
       has_many :designers
       has_many :promotion_logs, class_name: "Pandora::Models::ShopPromotionLog", foreign_key: :shop_id, dependent: :destroy
       has_many :shop_images, dependent: :destroy
-      has_many :images, through: :shop_images, foreign_key: :image_id
+      has_many :images, through: :shop_images, foreign_key: :image_id, dependent: :destroy
 
       def attributes
         {

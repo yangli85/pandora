@@ -1,6 +1,7 @@
 require 'pandora/models/designer'
 require 'pandora/models/user'
 require 'pandora/models/shop'
+require 'pandora/models/favorite_designer'
 require 'pandora/models/twitter'
 require 'pandora/models/vita'
 
@@ -52,6 +53,22 @@ describe Pandora::Models::Designer do
       it "should return all viate for designer" do
         expect(designer.vitae.count).to eq 3
       end
+    end
+
+    context 'users' do
+      before do
+        create(:favorite_designer, {user: user, favorited_designer: designer})
+      end
+
+      it "should return all users for designer" do
+        expect(designer.users.count).to eq 1
+      end
+
+      it "should delete favorite_designer if designer is deleted" do
+        designer.destroy
+        expect(Pandora::Models::FavoriteDesigner.count).to eq 0
+      end
+
     end
   end
 

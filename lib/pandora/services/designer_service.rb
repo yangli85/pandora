@@ -3,6 +3,7 @@ require 'pandora/models/designer'
 require 'pandora/models/vita'
 require 'pandora/models/vita_image'
 require 'pandora/models/image'
+require 'pandora/models/favorite_designer'
 require 'pandora/common/service_helper'
 
 module Pandora
@@ -56,10 +57,6 @@ module Pandora
         Pandora::Models::Designer.where(user: users).order('totally_stars desc').order("created_at asc").limit(page_size).offset((current_page-1)*page_size)
       end
 
-      def search_customers query, page_size, current_page
-        Pandora::Models::User.where("name like ? or phone_number like ?", "%#{query}%", "%#{query}%").order("vitality desc").limit(page_size).offset((current_page-1)*page_size)
-      end
-
       def get_designer_rank designer_id, order_by
         designer = Pandora::Models::Designer.find(designer_id)
         Pandora::Models::Designer.where("#{order_by} > ? or (#{order_by} = ? and created_at < ?)", designer.send(order_by.to_sym), designer.send(order_by.to_sym), designer.created_at).count + 1
@@ -69,11 +66,12 @@ module Pandora
         Pandora::Models::Designer.find(designer_id).shop
       end
 
-      def get_customers designer_id
-        designer = Pandora::Models::Designer.find(designer_id)
-        users = designer.twitters.order('created_at desc').first(20).map do |twitter|
-          twitter.author
-        end.uniq.first(10)
+      def get_customers designer_id, page_size, current_page
+        Pandora::Models::Designer.find(designer_id).users.order("name asc").limit(page_size).offset((current_page-1)*page_size)
+      end
+
+      def search_customers designer_id, query, page_size, current_page
+        Pandora::Models::Designer.find(designer_id).users.where("name like ? or phone_number like ?", "%#{query}%", "%#{query}%").order("vitality desc").limit(page_size).offset((current_page-1)*page_size)
       end
 
       def update_shop designer_id, shop_id

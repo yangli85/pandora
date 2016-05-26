@@ -220,39 +220,49 @@ describe Pandora::Services::DesignerService do
   end
 
   describe '#get_customers' do
+    let(:user1) { create(:user, {phone_number: '13800000001', name: 'Abc'}) }
+    let(:user2) { create(:user, {phone_number: '13800000002', name: 'Bcd'}) }
+    let(:user3) { create(:user, {phone_number: '13800000003', name: 'Cde'}) }
     let(:user) { create(:user, phone_number: '13811978823') }
     let(:designer) { create(:designer, user: user) }
-    let(:user4) { create(:user, {phone_number: '13800000004'}) }
-    let(:user5) { create(:user, {phone_number: '13800000005'}) }
-    let(:user6) { create(:user, {phone_number: '13800000006'}) }
-    let(:user7) { create(:user, {phone_number: '13800000007'}) }
-    let(:user8) { create(:user, {phone_number: '13800000008'}) }
-    let(:user9) { create(:user, {phone_number: '13800000009'}) }
-    let(:user10) { create(:user, {phone_number: '13800000010'}) }
-    let(:user11) { create(:user, {phone_number: '13800000011'}) }
 
     before do
-      create(:twitter, {author: user1, designer: designer, created_at: '2016-02-17 09:29:00'})
-      create(:twitter, {author: user2, designer: designer, created_at: '2016-02-17 10:29:00'})
-      create(:twitter, {author: user3, designer: designer, created_at: '2016-02-17 11:29:00'})
-      create(:twitter, {author: user4, designer: designer, created_at: '2016-02-17 12:29:00'})
-      create(:twitter, {author: user5, designer: designer, created_at: '2016-02-17 13:29:00'})
-      create(:twitter, {author: user6, designer: designer, created_at: '2016-02-17 14:29:00'})
-      create(:twitter, {author: user7, designer: designer, created_at: '2016-02-17 15:29:00'})
-      create(:twitter, {author: user8, designer: designer, created_at: '2016-02-17 16:29:00'})
-      create(:twitter, {author: user9, designer: designer, created_at: '2016-02-17 17:29:00'})
-      create(:twitter, {author: user10, designer: designer, created_at: '2016-02-17 18:29:00'})
-      create(:twitter, {author: user11, designer: designer, created_at: '2016-02-17 19:29:00'})
-      create(:twitter, {author: user11, designer: designer, created_at: '2016-02-17 20:29:00'})
-      create(:twitter, {author: user11, designer: designer, created_at: '2016-02-17 21:29:00'})
+      create(:favorite_designer, {user: user2, favorited_designer: designer})
+      create(:favorite_designer, {user: user1, favorited_designer: designer})
+      create(:favorite_designer, {user: user3, favorited_designer: designer})
     end
 
-    it "should return first 10 users" do
-      expect(subject.get_customers(designer.id).count).to eq 10
+    it "should return designer's users in page" do
+      expect(subject.get_customers(designer.id, 3, 1).count).to eq 3
+      expect(subject.get_customers(designer.id, 2, 1).count).to eq 2
+      expect(subject.get_customers(designer.id, 2, 2).count).to eq 1
     end
 
-    it "should latest uniq 10 users" do
-      expect(subject.get_customers(designer.id)).to eq [user11, user10, user9, user8, user7, user6, user5, user4, user3, user2]
+    it "should return designer's users in order" do
+      expect(subject.get_customers(designer.id, 3, 1)).to eq [user1, user2, user3]
+      expect(subject.get_customers(designer.id, 2, 1)).to eq [user1, user2]
+      expect(subject.get_customers(designer.id, 2, 1)).to eq [user1, user2]
+    end
+  end
+
+  describe '#search_customers' do
+    let(:user1) { create(:user, {phone_number: '13800000001', name: 'Abc'}) }
+    let(:user2) { create(:user, {phone_number: '13800000002', name: 'Bcd'}) }
+    let(:user3) { create(:user, {phone_number: '13800000003', name: 'Cde'}) }
+    let(:user) { create(:user, phone_number: '13811978823') }
+    let(:designer) { create(:designer, user: user) }
+
+    before do
+      create(:favorite_designer, {user: user2, favorited_designer: designer})
+      create(:favorite_designer, {user: user1, favorited_designer: designer})
+      create(:favorite_designer, {user: user3, favorited_designer: designer})
+    end
+
+    it "should return searched designer's users in page" do
+      expect(subject.search_customers(designer.id, '138', 3, 1).count).to eq 3
+      expect(subject.search_customers(designer.id, '13800000001', 3, 1).count).to eq 1
+      expect(subject.search_customers(designer.id, 'Ab', 3, 1).count).to eq 1
+      expect(subject.search_customers(designer.id, 'aaaa', 3, 1).count).to eq 0
     end
   end
 

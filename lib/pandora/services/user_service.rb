@@ -154,7 +154,7 @@ module Pandora
 
       def create_or_update_access_token user_id, access_token
         login_user = Pandora::Models::LoginUser.find_or_create_by(user_id: user_id)
-        login_user.access_token = access_token;
+        login_user.access_token = access_token
         login_user.save!
       end
 
