@@ -12,7 +12,7 @@ module Pandora
       include Pandora::Common::ServiceHelper
 
       def get_ordered_designers page_size, current_page, order_by
-        Pandora::Models::Designer.order("#{order_by} desc").order("created_at asc").limit(page_size).offset((current_page-1)*page_size)
+        Pandora::Models::Designer.vip.order("#{order_by} desc").order("created_at asc").limit(page_size).offset((current_page-1)*page_size)
       end
 
       def get_designer designer_id

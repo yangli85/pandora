@@ -11,6 +11,7 @@ require 'pandora/models/login_user'
 require 'pandora/models/payment_log'
 require 'pandora/models/order'
 require 'pandora/common/service_helper'
+require 'date'
 
 module Pandora
   module Services
@@ -176,6 +177,10 @@ module Pandora
 
       def update_order order, column, value
         order.update!(column.to_sym => value)
+      end
+
+      def get_twitters_for_today user_id
+        Pandora::Models::Twitter.where("author_id = ? or created_at like ?", user_id, Date.today).count
       end
     end
   end

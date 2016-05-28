@@ -435,5 +435,23 @@ describe Pandora::Services::UserService do
         expect { subject.create_order user.id, fake_wrong_product, fake_count, fake_total_fee }.to raise_error ActiveRecord::RecordInvalid
       end
     end
+
+    describe "#get_twitters_for_today" do
+      let(:image) { create(:image) }
+      let(:user) { create(:user) }
+      let(:designer) { create(:designer, user: user) }
+
+      before do
+        create(:twitter, author: user, designer: designer)
+      end
+
+      it "should return twitters count for user of today" do
+        expect(subject.get_twitters_for_today user.id).to eq 1
+      end
+
+      it "should return 0 if no twitter for user at today" do
+        expect(subject.get_twitters_for_today 2).to eq 0
+      end
+    end
   end
 end
