@@ -155,13 +155,28 @@ describe Pandora::Services::CommissionerService do
       before do
         user1 = create(:user, phone_number: fake_phone1)
         user2 = create(:user, phone_number: fake_phone2)
-        create(:designer, user: user1)
+        create(:designer, {user: user1})
       end
 
       it "should return all commissioner's designers" do
         expect(subject.get_promotion_designers(commissioner.id, 2, 1).count).to eq 1
         expect(subject.get_promotion_designers(commissioner.id, 1, 1).count).to eq 1
         expect(subject.get_promotion_designers(commissioner.id, 1, 2).count).to eq 0
+      end
+    end
+
+    describe "#get_promotion_vip_designers" do
+      before do
+        user1 = create(:user, phone_number: fake_phone1)
+        user2 = create(:user, phone_number: fake_phone2)
+        create(:designer, {user: user1, is_vip: true})
+        create(:designer, user: user2)
+      end
+
+      it "should return all commissioner's designers" do
+        expect(subject.get_promotion_vip_designers(commissioner.id, 2, 1).count).to eq 1
+        expect(subject.get_promotion_vip_designers(commissioner.id, 1, 1).count).to eq 1
+        expect(subject.get_promotion_vip_designers(commissioner.id, 1, 2).count).to eq 0
       end
     end
   end

@@ -18,7 +18,7 @@ describe Pandora::Services::DesignerService do
     it "should return only current page' designers" do
       expect(subject.get_ordered_designers(1, 2, 'totally_stars').count).to eq 1
       expect(subject.get_ordered_designers(2, 1, 'totally_stars').count).to eq 2
-      expect(subject.get_ordered_designers(5, 1, 'totally_stars').count).to eq 3
+      expect(subject.get_ordered_designers(5, 1, 'totally_stars').count).to eq 2
     end
 
     it "should order designers by totally_stars" do

@@ -12,7 +12,7 @@ module Pandora
             id: id,
             phone_number: phone_number,
             mobile_type: mobile_type,
-            created_at: created_at
+            created_at: created_at.strftime("%Y-%m-%d %H:%M:%S")
         }
       end
     end

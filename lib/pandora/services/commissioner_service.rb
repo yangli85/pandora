@@ -72,12 +72,6 @@ module Pandora
         Pandora::Models::Designer.vip.where(user_id: user_ids).order("created_at desc").limit(page_size).offset(page_size*(current_page-1))
       end
 
-      def get_promotion_designers c_id, page_size, current_page
-        phone_numbers = Pandora::Models::PromotionLog.select(:phone_number).where(c_id: c_id).uniq
-        user_ids = Pandora::Models::User.select(:id).where(phone_number: phone_numbers)
-        Pandora::Models::Designer.where(user_id: user_ids).order("created_at desc").limit(page_size).offset(page_size*(current_page-1))
-      end
-
       def get_shop_promotion_logs c_id, shop_id, page_size, current_page
         Pandora::Models::ShopPromotionLog.where(c_id: c_id, shop_id: shop_id).order("created_at desc").limit(page_size).offset(page_size*(current_page-1))
       end

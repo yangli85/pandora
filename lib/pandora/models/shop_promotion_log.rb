@@ -13,7 +13,7 @@ module Pandora
             id: id,
             content: content,
             commissioner: commissioner && commissioner.attributes,
-            created_at: created_at
+            created_at:  created_at.strftime("%Y-%m-%d %H:%M:%S")
         }
       end
     end
