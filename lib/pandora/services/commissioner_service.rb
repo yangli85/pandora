@@ -48,7 +48,7 @@ module Pandora
       end
 
       def get_promotion_log phone_number
-        Pandora::Models::PromotionLog.find_by_phone_phone_number(phone_number)
+        Pandora::Models::PromotionLog.find_by_phone_number(phone_number)
       end
 
       def delete_promotion_log log_id
@@ -98,6 +98,19 @@ module Pandora
 
       def register_shop name, address, longitude, latitude, scale, category, desc, image_paths, shop_images_folder, province, city
         shop = Pandora::Models::Shop.create!(name: name, address: address, longitude: longitude, latitude: latitude, scale: scale, category: category, desc: desc, province: province, city: city)
+        image_paths.each_with_index do |path, index|
+          image_path = move_image_to path[:image_path], shop_images_folder
+          image = Pandora::Models::Image.create!(category: 'twitter', url: image_path)
+          s_image_path = move_image_to path[:s_image_path], shop_images_folder
+          s_image = Pandora::Models::Image.create!(category: 'twitter', url: s_image_path, original_image: image)
+          Pandora::Models::ShopImage.create!(shop_id: shop.id, image: image)
+        end
+        shop
+      end
+
+      def update_shop shop_id, scale, category, desc, image_paths, shop_images_folder
+        shop = Pandora::Models::Shop.find(shop_id)
+        shop.update!(scale: scale, category: category, desc: desc)
         image_paths.each_with_index do |path, index|
           image_path = move_image_to path[:image_path], shop_images_folder
           image = Pandora::Models::Image.create!(category: 'twitter', url: image_path)
