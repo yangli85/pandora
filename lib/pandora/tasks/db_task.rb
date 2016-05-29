@@ -3,6 +3,14 @@ require 'active_support'
 require 'active_support/core_ext'
 require 'active_record'
 require 'pandora/models/designer'
+require 'pandora/models/favorite_image'
+require 'pandora/models/twitter_image'
+require 'pandora/models/image'
+require 'pandora/models/vita'
+require 'pandora/models/vita_image'
+require 'pandora/models/favorite_designer'
+require 'pandora/models/twitter'
+require 'pandora/models/promotion_log'
 require 'yaml'
 
 module Pandora
@@ -49,6 +57,8 @@ module Pandora
           task :check_vip_expired => :environment do
             ENV['RAILS_ENV'] = ENV["RACK_ENV"] || "development"
             Pandora::Models::Designer.lock.where("expired_at < ? ", Date.today).update_all("is_vip = false")
+            phone_numbers = Pandora::Models::Designer.non_vip.select(:phone_number)
+            Pandora::Models::PromotionLog.where(:phone_number => phone_numbers).destroy_all
           end
 
           desc "update designer weekly stars every week"
@@ -61,6 +71,12 @@ module Pandora
           task :update_monthly_stars => :environment do
             ENV['RAILS_ENV'] = ENV["RACK_ENV"] || "development"
             Pandora::Models::Designer.lock.update_all("monthly_stars = 0")
+          end
+
+          desc "delete inactivated designers every day"
+          task :delete_non_activated_designers => :environment do
+            ENV['RAILS_ENV'] = ENV["RACK_ENV"] || "development"
+            Pandora::Models::Designer.non_activated.lock.destroy_all
           end
 
           task :environment do

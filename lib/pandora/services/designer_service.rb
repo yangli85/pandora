@@ -22,6 +22,13 @@ module Pandora
         end
       end
 
+      def get_designer_by_phone_number phone_number
+        begin
+          Pandora::Models::Designer.find_by_phone_number(phone_number)
+        rescue => e
+        end
+      end
+
       def create_designer user_id
         Pandora::Models::Designer.create!(user_id: user_id)
       end

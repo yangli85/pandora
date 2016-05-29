@@ -47,6 +47,10 @@ module Pandora
         commissioner.promotion_logs.count
       end
 
+      def get_promotion_log phone_number
+        Pandora::Models::PromotionLog.find_by_phone_phone_number(phone_number)
+      end
+
       def delete_promotion_log log_id
         Pandora::Models::PromotionLog.find(log_id).destroy
       end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160428141223) do
+ActiveRecord::Schema.define(version: 20160529110923) do
 
   create_table "account_logs", force: :cascade do |t|
     t.integer  "account_id", limit: 4
@@ -84,6 +84,7 @@ ActiveRecord::Schema.define(version: 20160428141223) do
     t.integer  "likes",         limit: 4, default: 0
     t.datetime "created_at",                              null: false
     t.datetime "updated_at",                              null: false
+    t.boolean  "activated",               default: false, null: false
   end
 
   add_index "designers", ["shop_id"], name: "index_designers_on_shop_id", using: :btree
@@ -115,7 +116,6 @@ ActiveRecord::Schema.define(version: 20160428141223) do
     t.string   "category",          limit: 255, default: "unknow", null: false
     t.string   "url",               limit: 255,                    null: false
     t.integer  "original_image_id", limit: 4
-    t.integer  "likes",             limit: 4
     t.datetime "created_at",                                       null: false
     t.datetime "updated_at",                                       null: false
   end
