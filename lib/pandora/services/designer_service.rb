@@ -24,7 +24,8 @@ module Pandora
 
       def get_designer_by_phone_number phone_number
         begin
-          Pandora::Models::Designer.find_by_phone_number(phone_number)
+          user = Pandora::Models::User.find_by_phone_number(phone_number)
+          user && user.designer
         rescue => e
         end
       end

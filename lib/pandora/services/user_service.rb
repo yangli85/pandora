@@ -180,7 +180,7 @@ module Pandora
       end
 
       def get_twitters_for_today user_id
-        Pandora::Models::Twitter.where("author_id = ? or created_at like ?", user_id, Date.today).count
+        Pandora::Models::Twitter.where("author_id = ? and DATE(created_at) = ?", user_id, Date.today).count
       end
     end
   end
