@@ -57,8 +57,9 @@ module Pandora
           task :check_vip_expired => :environment do
             ENV['RAILS_ENV'] = ENV["RACK_ENV"] || "development"
             Pandora::Models::Designer.lock.where("expired_at < ? ", Date.today).update_all("is_vip = false")
-            phone_numbers = Pandora::Models::Designer.non_vip.select(:phone_number)
-            Pandora::Models::PromotionLog.where(:phone_number => phone_numbers).destroy_all
+            user_ids = Pandora::Models::Designer.non_vip.select(:user_id)
+            phone_numbers = Pandora::Models::User.where(id:user_ids).map(&:phone_number)
+            Pandora::Models::PromotionLog.where(phone_number: phone_numbers).destroy_all
           end
 
           desc "update designer weekly stars every week"
