@@ -35,12 +35,16 @@ describe Pandora::Models::Vita do
                   {
                       :id => 2,
                       :url => "images/1.jpg",
-                      :s_url => "images/1.jpg"
+                      :s_url => "images/1.jpg",
+                      :width => 1000,
+                      :height => 1500
                   },
                   {
                       :id => 3,
                       :url => "images/1.jpg",
-                      :s_url => nil
+                      :s_url => nil,
+                      :width => 1000,
+                      :height => 1500
                   }
               ],
           :created_at => "1分钟内"}

@@ -13,7 +13,9 @@ module Pandora
         {
             id: id,
             url: url,
-            s_url: s_url
+            s_url: s_url,
+            width: width,
+            height: height
         }
       end
 

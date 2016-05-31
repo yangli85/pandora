@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160529110923) do
+ActiveRecord::Schema.define(version: 20160602153123) do
 
   create_table "account_logs", force: :cascade do |t|
     t.integer  "account_id", limit: 4
@@ -118,6 +118,8 @@ ActiveRecord::Schema.define(version: 20160529110923) do
     t.integer  "original_image_id", limit: 4
     t.datetime "created_at",                                       null: false
     t.datetime "updated_at",                                       null: false
+    t.integer  "width",             limit: 4
+    t.integer  "height",            limit: 4
   end
 
   add_index "images", ["original_image_id"], name: "fk_rails_5e5acaf60a", using: :btree

@@ -26,6 +26,7 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib", "db", "config"]
 
   spec.add_dependency 'mysql2'
+  spec.add_dependency 'fastimage'
   spec.add_dependency 'activerecord', '~> 4.2.0'
   spec.add_dependency 'rake', '~> 10.0'
   spec.add_dependency 'bundler', '~> 1.10'

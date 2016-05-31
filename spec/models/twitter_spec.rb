@@ -102,7 +102,9 @@ describe Pandora::Models::Twitter do
                   :avatar => {
                       :id => 1,
                       :url => "images/1.jpg",
-                      :s_url => nil
+                      :s_url => nil,
+                      :width => 1000,
+                      :height => 1500
                   }
               },
           :content => "this is a test twitter",
@@ -115,7 +117,9 @@ describe Pandora::Models::Twitter do
                   :avatar => {
                       :id => 1,
                       :url => "images/1.jpg",
-                      :s_url => nil
+                      :s_url => nil,
+                      :width => 1000,
+                      :height => 1500
                   }
               },
           :images =>
@@ -125,7 +129,9 @@ describe Pandora::Models::Twitter do
                           {
                               :id => 2,
                               :url => "images/1.jpg",
-                              :s_url => "images/1.jpg"
+                              :s_url => "images/1.jpg",
+                              :width => 1000,
+                              :height => 1500
                           },
                       :likes => 2,
                       :rank => 1
@@ -135,7 +141,9 @@ describe Pandora::Models::Twitter do
                           {
                               :id => 3,
                               :url => "images/1.jpg",
-                              :s_url => "images/1.jpg"
+                              :s_url => "images/1.jpg",
+                              :width => 1000,
+                              :height => 1500
                           },
                       :likes => 3,
                       :rank => 1

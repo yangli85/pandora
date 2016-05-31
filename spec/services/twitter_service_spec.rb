@@ -18,12 +18,14 @@ describe Pandora::Services::TwitterService do
   let(:twitter2) { create(:twitter, {author: author, designer: designer}) }
 
   before do
+    allow(subject).to receive(:get_image_size).and_return({width: 1000, height: 2000})
     create(:twitter_image, {likes: 2, image: image1, twitter: twitter1, rank: 1})
     create(:twitter_image, {likes: 3, image: image2, twitter: twitter1, rank: 2})
     create(:twitter_image, {likes: 4, image: image3, twitter: twitter1, rank: 3})
     create(:twitter_image, {likes: 5, image: image4, twitter: twitter2, rank: 1})
     create(:twitter_image, {likes: 12, image: image5, twitter: twitter2, rank: 2})
   end
+
   describe '#get_ordered_twitter_images' do
     context 'page_size and current_page' do
       it "should return 3 twitter images if page size is 3 and current_page is 1" do

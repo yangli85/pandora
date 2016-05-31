@@ -9,6 +9,7 @@ describe Pandora::Services::DesignerService do
   let(:user3) { create(:user, {phone_number: '13800000003', name: 'tommy han'}) }
 
   before do
+    allow(subject).to receive(:get_image_size).and_return({width: 1000, height: 2000})
     create(:designer, {shop: shop, user: user2, totally_stars: 1, is_vip: true})
     create(:designer, {shop: shop, user: user1, totally_stars: 2, is_vip: true})
     create(:designer, {shop: shop, user: user3, totally_stars: 3, is_vip: false})

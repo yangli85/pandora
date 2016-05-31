@@ -36,7 +36,8 @@ module Pandora
 
         image_paths.each_with_index do |path, index|
           image_path = move_image_to path[:image_path], twitter_images_folder
-          image = Pandora::Models::Image.create!(category: 'twitter', url: image_path)
+          image_size = get_image_size image_path
+          image = Pandora::Models::Image.create!(category: 'twitter', url: image_path, width: image_size[:ndeiswidth], height: image_size[:height])
           s_image_path = move_image_to path[:s_image_path], twitter_images_folder
           s_image = Pandora::Models::Image.create!(category: 'twitter', url: s_image_path, original_image: image)
           Pandora::Models::TwitterImage.create!(twitter_id: twitter.id, image: image, rank: index+1)

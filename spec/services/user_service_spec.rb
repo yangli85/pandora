@@ -72,7 +72,9 @@ describe Pandora::Services::UserService do
                                                                               {
                                                                                   :id => 1,
                                                                                   :url => "avatar_images/1.jpg",
-                                                                                  :s_url => "avatar_images/s_1.jpg"
+                                                                                  :s_url => "avatar_images/s_1.jpg",
+                                                                                  :width => nil,
+                                                                                  :height => nil
                                                                               }
                                                                           )
     end
