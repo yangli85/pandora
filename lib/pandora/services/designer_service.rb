@@ -54,7 +54,7 @@ module Pandora
         image_paths.each do |path|
           image_path = move_image_to path[:image_path], vita_image_folder
           image_size = get_image_size image_path
-          image = Pandora::Models::Image.create!(category: 'vita', url: image_path, width: image_size[:ndeiswidth], height: image_size[:height])
+          image = Pandora::Models::Image.create!(category: 'vita', url: image_path, width: image_size[:width], height: image_size[:height])
           s_image_path = move_image_to path[:s_image_path], vita_image_folder
           s_image = Pandora::Models::Image.create!(category: 'vita', original_image: image, url: s_image_path)
           Pandora::Models::VitaImage.create!(image: image, vita: vita)
