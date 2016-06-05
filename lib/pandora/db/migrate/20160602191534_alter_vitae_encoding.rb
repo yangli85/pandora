@@ -1,7 +1,7 @@
 class AlterVitaeEncoding < ActiveRecord::Migration
   def up
     execute <<-SQL
-      ALTER TABLE vitae CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci
+      ALTER TABLE vitae convert to character set utf8mb4 collate utf8mb4_bin;
     SQL
   end
 
