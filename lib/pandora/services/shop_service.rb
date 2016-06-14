@@ -51,7 +51,7 @@ EOSQL
       end
 
       def get_similar_shops name, address, longitude, latitude
-        Pandora::Models::Shop.active.where("name like ? and address like ? and abs(latitude - #{latitude}) <0.05 and abs(longitude - #{longitude}) <0.05", "%#{name}%", "%#{address}%")
+        Pandora::Models::Shop.active.where("name like ? and abs(latitude - #{latitude}) <0.05 and abs(longitude - #{longitude}) <0.05", "%#{name}%")
       end
 
       private
