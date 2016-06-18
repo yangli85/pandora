@@ -33,7 +33,7 @@ module Pandora
             likes: likes,
             designer: designer.attributes,
             image_count: image_count,
-            images: twitter_images.map(&:images),
+            images: twitter_images.order("rank asc").map(&:images),
             created_at: relative_time(created_at)
         }
       end

@@ -11,7 +11,7 @@ module Pandora
       include Pandora::Common::ServiceHelper
 
       def get_ordered_twitter_images page_size, current_page, order_by
-        Pandora::Models::TwitterImage.joins(:twitter).where(twitters: {deleted: false}).order("#{order_by} desc, created_at desc").limit(page_size).offset((current_page-1)*page_size)
+        Pandora::Models::TwitterImage.where(twitter: Pandora::Models::Twitter.active).order("#{order_by} desc, created_at desc").limit(page_size).offset((current_page-1)*page_size)
       end
 
       def get_twitter_images id
