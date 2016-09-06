@@ -10,9 +10,9 @@ module Pandora
 
       def attributes
         {
-            id: id,
-            twitter_id: twitter_id,
-            user_id: user_id
+            category: category,
+            link: link,
+            image_url: image_url
         }
       end
     end
