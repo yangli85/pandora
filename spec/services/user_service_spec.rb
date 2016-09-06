@@ -455,5 +455,25 @@ describe Pandora::Services::UserService do
         expect(subject.get_twitters_for_today 2).to eq 0
       end
     end
+
+    describe "#share_twitter_state" do
+      let(:author) { create(:user, phone_number: '13800000001') }
+      let(:user) { create(:user, phone_number: '13800000002') }
+      let(:designer) { create(:designer, user: user) }
+      let(:image1) { create(:image, category: 'twitter') }
+      let(:s_image1) { create(:image, {category: 'twitter', original_image: image1}) }
+      let(:twitter) { create(:twitter, {author: author, designer: designer}) }
+
+      it "should create share twitter record" do
+        shared_twitter = subject.share_twitter_state(user.id, twitter.id, "WX")
+        expect(shared_twitter.user).to eq user
+        expect(shared_twitter.twitter).to eq twitter
+        expect(shared_twitter.channel).to eq "WX"
+      end
+
+      it "should raise exception if channel is wrong" do
+        expect{subject.share_twitter_state(user.id, twitter.id, "WRONG")}.to raise_error ActiveRecord::RecordInvalid
+      end
+    end
   end
 end

@@ -7,7 +7,6 @@ require 'pandora/models/user'
 require 'pandora/models/designer'
 require 'pandora/models/shop_image'
 require 'pandora/models/shop'
-require 'pandora/models/shared_twitter'
 
 module Pandora
   module Services
@@ -120,10 +119,6 @@ module Pandora
           Pandora::Models::ShopImage.create!(shop_id: shop.id, image: image)
         end
         shop
-      end
-
-      def shared_twitter_state user_id, twitter_id, channel
-        Pandora::Models::SharedTwitter.create!(user_id: user_id, twitter_id: twitter_id, channel: channel)
       end
     end
   end

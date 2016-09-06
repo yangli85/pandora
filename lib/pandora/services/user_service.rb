@@ -11,6 +11,7 @@ require 'pandora/models/login_user'
 require 'pandora/models/payment_log'
 require 'pandora/models/order'
 require 'pandora/common/service_helper'
+require 'pandora/models/shared_twitter'
 require 'date'
 
 module Pandora
@@ -181,6 +182,10 @@ module Pandora
 
       def get_twitters_for_today user_id
         Pandora::Models::Twitter.where("author_id = ? and DATE(created_at) = ?", user_id, Date.today).count
+      end
+
+      def share_twitter_state user_id, twitter_id, channel
+        Pandora::Models::SharedTwitter.create!(user_id: user_id, twitter_id: twitter_id, channel: channel)
       end
     end
   end
