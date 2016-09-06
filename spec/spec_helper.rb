@@ -28,6 +28,8 @@ require 'factories/promotion_log'
 require 'factories/payment_log'
 require 'factories/order'
 require 'factories/shop_promotion_log'
+require 'factories/shared_twitter'
+require 'factories/popup_ad'
 
 
 RSpec.configure do |config|

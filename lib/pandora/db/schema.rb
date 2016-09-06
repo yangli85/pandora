@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160906211434) do
+ActiveRecord::Schema.define(version: 20160906221215) do
 
   create_table "account_logs", force: :cascade do |t|
     t.integer  "account_id", limit: 4
@@ -174,6 +174,12 @@ ActiveRecord::Schema.define(version: 20160906211434) do
 
   add_index "payment_logs", ["order_id"], name: "fk_rails_6dd88a4342", using: :btree
 
+  create_table "popup_ads", force: :cascade do |t|
+    t.string "image_url", limit: 255,                    null: false
+    t.string "link",      limit: 255,                    null: false
+    t.string "category",  limit: 255, default: "unknow", null: false
+  end
+
   create_table "promotion_logs", force: :cascade do |t|
     t.string   "phone_number", limit: 255
     t.string   "mobile_type",  limit: 255, default: "unknow"
@@ -183,6 +189,15 @@ ActiveRecord::Schema.define(version: 20160906211434) do
   end
 
   add_index "promotion_logs", ["c_id"], name: "index_promotion_logs_on_c_id", using: :btree
+
+  create_table "shared_twitters", force: :cascade do |t|
+    t.integer "twitter_id", limit: 4,                      null: false
+    t.integer "user_id",    limit: 4,                      null: false
+    t.string  "channel",    limit: 255, default: "unknow", null: false
+  end
+
+  add_index "shared_twitters", ["twitter_id"], name: "index_shared_twitters_on_twitter_id", using: :btree
+  add_index "shared_twitters", ["user_id"], name: "index_shared_twitters_on_user_id", using: :btree
 
   create_table "shop_images", force: :cascade do |t|
     t.integer  "shop_id",    limit: 4
@@ -228,11 +243,6 @@ ActiveRecord::Schema.define(version: 20160906211434) do
   end
 
   add_index "sms_codes", ["phone_number"], name: "index_sms_codes_on_phone_number", using: :btree
-
-  create_table "test", id: false, force: :cascade do |t|
-    t.integer "id",   limit: 4
-    t.string  "name", limit: 3
-  end
 
   create_table "twitter_images", force: :cascade do |t|
     t.integer  "twitter_id", limit: 4,             null: false
@@ -316,6 +326,8 @@ ActiveRecord::Schema.define(version: 20160906211434) do
   add_foreign_key "orders", "users"
   add_foreign_key "payment_logs", "orders"
   add_foreign_key "promotion_logs", "commissioners", column: "c_id"
+  add_foreign_key "shared_twitters", "twitters"
+  add_foreign_key "shared_twitters", "users"
   add_foreign_key "shop_images", "images"
   add_foreign_key "shop_images", "shops"
   add_foreign_key "shop_promotion_logs", "commissioners", column: "c_id"
