@@ -4,6 +4,7 @@ default: &default
   host: <%= ENV['PANDORA_DATABASE_HOST']%>
   username: <%= ENV['PANDORA_DATABASE_USERNAME']%>
   password: <%= ENV['PANDORA_DATABASE_PASSWORD']%>
+  pool: 30
 
 production:
   <<: *default

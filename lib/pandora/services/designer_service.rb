@@ -98,7 +98,7 @@ module Pandora
       end
 
       def get_new_designer
-        Pandora::Models::Designer.vip.order("created_at desc").first
+        Pandora::Models::Designer.vip.order("id desc").first
       end
 
       def get_top1_designer order_by

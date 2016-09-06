@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160602211434) do
+ActiveRecord::Schema.define(version: 20160906211434) do
 
   create_table "account_logs", force: :cascade do |t|
     t.integer  "account_id", limit: 4
@@ -87,8 +87,11 @@ ActiveRecord::Schema.define(version: 20160602211434) do
     t.boolean  "activated",               default: false, null: false
   end
 
+  add_index "designers", ["monthly_stars"], name: "index_designers_on_monthly_stars", using: :btree
   add_index "designers", ["shop_id"], name: "index_designers_on_shop_id", using: :btree
+  add_index "designers", ["totally_stars"], name: "index_designers_on_totally_stars", using: :btree
   add_index "designers", ["user_id"], name: "index_designers_on_user_id", using: :btree
+  add_index "designers", ["weekly_stars"], name: "index_designers_on_weekly_stars", using: :btree
 
   create_table "favorite_designers", force: :cascade do |t|
     t.integer  "user_id",     limit: 4, null: false
@@ -225,6 +228,11 @@ ActiveRecord::Schema.define(version: 20160602211434) do
   end
 
   add_index "sms_codes", ["phone_number"], name: "index_sms_codes_on_phone_number", using: :btree
+
+  create_table "test", id: false, force: :cascade do |t|
+    t.integer "id",   limit: 4
+    t.string  "name", limit: 3
+  end
 
   create_table "twitter_images", force: :cascade do |t|
     t.integer  "twitter_id", limit: 4,             null: false

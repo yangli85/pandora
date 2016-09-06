@@ -51,7 +51,7 @@ module Pandora
       end
 
       def get_latest_twitter
-        Pandora::Models::Twitter.active.order("created_at desc").first
+        Pandora::Models::Twitter.active.order("id desc").first
       end
     end
   end
